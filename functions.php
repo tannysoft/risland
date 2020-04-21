@@ -14,11 +14,11 @@ if (!isset($GLOBALS['s_header_m']))             {$GLOBALS['s_header_m']         
 if (!isset($GLOBALS['s_header_d']))             {$GLOBALS['s_header_d']             = 'auto-show';}     // standard, fixed, auto-show
 if (!isset($GLOBALS['s_header_action']))        {$GLOBALS['s_header_action']        = array('search');} // search, cart, none
 if (!isset($GLOBALS['s_blog_layout']))          {$GLOBALS['s_blog_layout']          = 'full-width';}    // full-width, leftbar, rightbar
-if (!isset($GLOBALS['s_blog_layout_single']))   {$GLOBALS['s_blog_layout_single']   = 'full-width';}    // full-width, leftbar, rightbar
+if (!isset($GLOBALS['s_blog_layout_single']))   {$GLOBALS['s_blog_layout_single']   = 'rightbar';}    // full-width, leftbar, rightbar
 if (!isset($GLOBALS['s_blog_columns_m']))       {$GLOBALS['s_blog_columns_m']       = '1';}             // 1,2,3
 if (!isset($GLOBALS['s_blog_columns_d']))       {$GLOBALS['s_blog_columns_d']       = '3';}             // 1,2,3,4,5,6
 if (!isset($GLOBALS['s_blog_template']))        {$GLOBALS['s_blog_template']        = 'card';}          // list, card, hero, caption
-if (!isset($GLOBALS['s_blog_profile']))         {$GLOBALS['s_blog_profile']         = 'enable';}        // disable, enable
+if (!isset($GLOBALS['s_blog_profile']))         {$GLOBALS['s_blog_profile']         = 'disable';}        // disable, enable
 if (!isset($GLOBALS['s_blog_archive_profile'])) {$GLOBALS['s_blog_archive_profile'] = 'enable';}        // disable, enable
 if (!isset($GLOBALS['s_shop_layout']))          {$GLOBALS['s_shop_layout']          = 'full-width';}    // full-width, leftbar, rightbar
 if (!isset($GLOBALS['s_shop_pagebuilder']))     {$GLOBALS['s_shop_pagebuilder']     = 'disable';}       // disable, enable
@@ -71,6 +71,7 @@ if (!function_exists('seed_setup')) {
             'flex-height' => true,
         ));
         add_theme_support('post-thumbnails');
+        add_image_size( 'condo', 350, 350, true );
         set_post_thumbnail_size($GLOBALS['s_thumb_width'], $GLOBALS['s_thumb_height'], $GLOBALS['s_thumb_crop']);
         register_nav_menus(array(
             'primary' => esc_html__('Main Menu', 'seed'),
@@ -306,17 +307,6 @@ add_action( 'tgmpa_register', 'plant_register_required_plugins' );
 
 function plant_register_required_plugins() {
 	$plugins = array(
-		array(
-			'name'               => 'Smart Slider 3 Pro',
-			'slug'               => 'nextend-smart-slider3-pro',
-			'source'             => get_template_directory() . '/vendor/nextend/smartslider3-wordpress-PRO-3.3.28.zip',
-			'required'           => false,
-			'version'            => '3.3.28',
-			'force_activation'   => false,
-			'force_deactivation' => false,
-			'external_url'       => '',
-			'is_callable'        => '',
-        ),
 		array(
 			'name'               => 'Kirki',
 			'slug'               => 'kirki',

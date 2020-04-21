@@ -8,8 +8,10 @@ $show_author        = get_field('show_author');
 $to_grid            = get_field('to_grid');
 $mobile_columns     = get_field('mobile_columns') ?: 1;
 $desktop_columns    = get_field('desktop_columns') ?: 3;
+$post_type          = get_field('post_type') ?: 'post';
 
 $args = array(
+    'post_type'      => $post_type,
     'posts_per_page' => $posts_per_page,
 );
 switch ($content_source) {

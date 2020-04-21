@@ -3,6 +3,7 @@
 <?php 
 $the_query = new WP_Query( array( 'pagename' => 'footer' ) );
 if ($the_query->have_posts()) : 
+    echo '<div class="site-footer-space"></div>';
     echo '<aside id="footpage" class="site-footpage"><div class="s-container">';
     while ( $the_query->have_posts() ) {
         $the_query->the_post();

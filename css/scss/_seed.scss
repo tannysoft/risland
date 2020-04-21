@@ -136,6 +136,15 @@ a.s-button,
     &.-d6 {
       grid-template-columns: repeat(6, minmax(0, 1fr));
     }
+    &.-c3-c9 {
+      grid-template-columns: 3fr 9fr;
+    }
+    &.-condo {
+      grid-gap: 70px;
+    }
+    &.-middle {
+      align-items: center;
+    }
   }
 }
 

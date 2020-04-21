@@ -1,6 +1,6 @@
 // out: ../desktop.css, compress: true, sourceMap: false, autoprefixer: last 5 versions, groupmedia: true
 
-@import "variables";
+@import "_variables.scss";
 
 /* == HEADER == */
 body.headbar-d {
@@ -41,9 +41,10 @@ body.headbar-d {
 }
 .site-branding {
   position: relative;
-  top: auto;
+  bottom: 12px;
   left: auto;
   transform: none;
+  height: 20px;
   img {
     max-height: $header-d-height;
   }
@@ -78,12 +79,31 @@ body.headbar-d {
     height: 100%;
     list-style: none;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     flex-direction: column;
     text-align: center;
     transition: 0.3s ease-in-out;
     a {
-      padding: 10px 15px;
+      display: block;
+      position: relative;
+      padding: 12px 17px;
+      &:after {
+        content: '';
+        display: inline-block;
+        margin-left: 17px;
+        margin-right: -17px;
+        width: 1px;
+        height: 100%;
+        background-color: #fff;
+        vertical-align: bottom;
+      }
+    }
+    &:last-child {
+      a {
+        &:after {
+          display: none;
+        }
+      }
     }
     &:hover {
       > .sub-menu {
@@ -219,6 +239,10 @@ body.headbar-d {
       width: 750px;
     }
   }
+  &.-minimal {
+    margin-bottom: $space-d * 2;
+    padding-top: $space-d * 2;
+  }
   .title {
     font-size: $title-d-size;
   }
@@ -254,11 +278,11 @@ body.headbar-d {
     display: flex;
     align-items: stretch;
     .widget-area {
-      width: 240px;
+      width: 340px;
       padding-left: $space-d;
     }
     .content-area {
-      width: calc(100% - 240px);
+      width: calc(100% - 340px);
     }
   }
   &.-leftbar {
@@ -294,6 +318,23 @@ body.page-template-page-form .site-content {
   }
 }
 /* SINGLE - AUTHOR PROFILE */
+.prop-navigation {
+  margin-bottom: 50px;
+}
+.single-pic {
+  margin-bottom: 40px;
+}
+.project-description,
+.room-description {
+  .item {
+    .title {
+      width: 200px;
+    }
+    .desc {
+      width: calc(100% - 205px);
+    }
+  }
+}
 .entry-author {
   margin-top: 40px;
   text-align: left;

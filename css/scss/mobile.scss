@@ -1,10 +1,10 @@
 // out: ../mobile.css, compress: true, sourceMap: false, autoprefixer: last 5 versions, groupmedia: true
 
-@import "variables";
-@import "begin";
-@import "seed";
-@import "fonts";
-@import "etc";
+@import "_variables.scss";
+@import "_begin.scss";
+@import "_seed.scss";
+@import "_fonts.scss";
+@import "_etc.scss";
 
 /* == GENERAL == */
 .site {
@@ -413,6 +413,12 @@
     }
   }
   &.-minimal {
+    text-align: center;
+    .title {
+      font-weight: 700;
+      line-height: 1em;
+      color: $primary;
+    }
     h4 {
       display: none;
     }
@@ -636,6 +642,24 @@
       padding: 0 15px 15px;
     }
   }
+  &.-condo {
+    .pic {
+      margin: 0;
+    }
+    .entry-title {
+      display: none;
+    }
+    .entry-summary {
+      display: none;
+    }
+    .pricing-start {
+      text-align: center;
+      font-family: $heading-font;
+      font-size: 1.4em;
+      font-weight: 600;
+      color: #fff;
+    }
+  }
   a.author {
     align-items: center;
     display: flex;
@@ -830,10 +854,145 @@ body.page-template-page-form .site-content {
 /* SINGLE */
 .single-area {
   > .content-area {
-    max-width: 750px;
     margin: 0 auto;
     padding-left: 0;
     padding-right: 0;
+    .entry-title {
+      font-weight: 700;
+    }
+    .entry-content {
+      font-family: $heading-font;
+      font-size: 1.1em;
+      font-weight: 500;
+      line-height: 1.7em;
+    }
+  }
+}
+
+.prop-navigation {
+  text-align: center;
+  ul {
+    list-style: none;
+    padding: 0;
+    li {
+      display: inline-block;
+      margin-right: 50px;
+      a {
+        font-family: $heading-font;
+        font-size: 1.2em;
+      }
+      &.active {
+        a {
+          font-weight: bold;
+          border-bottom: 1px solid $primary;
+        }
+      }
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.single-pic {
+  img {
+    width: 100%;
+  }
+}
+
+.project-description,
+.room-description {
+  font-weight: 400;
+  .item {
+    .title {
+      display: inline-block;
+      width: 49.5%;
+    }
+    .desc {
+      display: inline-block;
+      width: 49.5%;
+    }
+  }
+}
+
+.room-description {
+  margin-top: 15px;
+}
+
+.price-description {
+  .title {
+    font-weight: 700;
+    font-size: 1.9em;
+    line-height: 1.2em;
+  }
+  .pricing {
+    font-weight: 700;
+    font-size: 2.2em;
+    line-height: 1.2em;
+  }
+}
+
+.photo-gallery,
+.floor-plan-gallery {
+  img {
+    width: 100%;
+  }
+}
+
+.more-condition {
+  p {
+    margin-bottom: .3em;
+    font-size: 1.3em;
+  }
+}
+
+.side-reserve {
+  color: #fff;
+  padding: 23px 25px 12px;
+  .reserve {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #fff;
+    .title {
+      color: $purple;
+    }
+    .pricing {
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 2.2em;
+      line-height: 1.2em;
+    }
+  }
+  .detail {
+    margin-bottom: 8px;
+    font-size: .8em;
+    color: $purple;
+    .s-grid {
+      margin-bottom: 0;
+    }
+  }
+  .form-reserve {
+    .agreement {
+      margin-bottom: 10px;
+      input {
+        display: inline-block;
+      }
+      label {
+        display: inline-block;
+        font-size: .8em;
+      }
+    }
+    .buttons {
+      .btn {
+        margin-bottom: 15px;
+        border-radius: 2.53px;
+        display: block;
+        font-size: 1.6em;
+        font-weight: 700;
+        background-color: #fff;
+        color: $dark-purple;
+        text-align: center;
+      }
+    }
   }
 }
 
@@ -962,5 +1121,17 @@ body.page-template-page-form .site-content {
   }
   p:last-of-type {
     margin-bottom: 0;
+  }
+}
+.site-footpage {
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  .foot-social {
+    .wp-block-image {
+      margin: 0 10px 10px 0;
+      display: inline-block;
+    }
   }
 }

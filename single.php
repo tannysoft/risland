@@ -166,7 +166,7 @@ $secondary_color = get_field('secondary_color', get_the_ID());
 					<label for="agree"> ยอมรับเงื่อนไขของยูนิต และการจองออนไลน์</label>
 				</div>
 				<div class="buttons">
-					<a href="#" class="btn">จองเลย</a>
+					<a href="#" id="btn-booking" class="btn">จองเลย</a>
 					<a href="#" class="btn">ติดต่อเจ้าหน้าที่</a>
 				</div>
 			</div>

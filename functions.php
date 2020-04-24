@@ -398,7 +398,7 @@ function risland_get_project_unit( $data ) {
             'relation'		=> 'AND',
             array(
                 'key'		=> 'project',
-                'value'		=> $data['id'],
+                'value'		=> (int)$data['id'],
                 'compare'	=> '='
             ),
             // array(
@@ -454,15 +454,16 @@ function risland_get_project_unit( $data ) {
         while ( $query->have_posts() ) {
             $query->the_post();
 
-            $propertyType = get_the_terms( get_the_id(), 'product_cat' );
-            unset($propertyTypeData);
-            $x = 0;
-
-            foreach($propertyType as $key => $value) {
-                $propertyTypeData[$x]['id']         = $value->term_id;
-                $propertyTypeData[$x]['name']       = $value->name;
-                $x++;
+            $propertyType = get_field('property_type', (int)$data['id']);
+            foreach ($propertyType as $key => $value) {
+                $propertyId		= get_term($value)->term_id;
+                $propertySlug	= get_term($value)->slug;
+                $propertyName	= get_term($value)->name;
             }
+
+            $return['property_type'][0]['id']      = $propertyId;
+            $return['property_type'][0]['name']    = $propertyName;
+            $return['property_type'][0]['slug']    = $propertySlug;
 
             $roomType = get_the_terms( get_the_id(), 'room_type' );
             unset($roomTypeData);
@@ -515,7 +516,6 @@ function risland_get_project_unit( $data ) {
 
             $items[$i]['id']                    = get_the_id();
             $items[$i]['title']                 = get_the_title();
-            $items[$i]['property_type']         = $propertyTypeData;
             $items[$i]['room_type']             = $roomTypeData;
             $items[$i]['room_size']             = $roomSizeData;
             $items[$i]['floor']                 = $floorData;
@@ -578,4 +578,11 @@ function risland_get_project_unit( $data ) {
     }
    
     return $return;
+}
+
+add_filter( 'woocommerce_add_to_cart_validation', 'remove_cart_item_before_add_to_cart', 20, 3 );
+function remove_cart_item_before_add_to_cart( $passed, $product_id, $quantity ) {
+    if( ! WC()->cart->is_empty() )
+        WC()->cart->empty_cart();
+    return $passed;
 }

@@ -57,6 +57,10 @@ document.addEventListener(
       unitId = event.target.getAttribute('data-value');
       getUnitData(false, false, false, false, true, false);
     }
+    // if (event.target.matches("#btn-booking")) {
+    //   event.preventDefault();
+    //   console.log(unitId);
+    // }
   },
   false
 );
@@ -164,6 +168,7 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
 
       if(roomType !== null && unitDetailLoad == true) {
         console.log(data.items);
+        document.getElementById("btn-booking").href               = `/checkout/?add-to-cart=${data.items[0].id}`;
         document.getElementById('label-direction').innerHTML      = data.items[0].direction[0];
         document.getElementById('label-price').innerHTML          = data.items[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         document.getElementById('label-unit').innerHTML           = data.items[0].title;

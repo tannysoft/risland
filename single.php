@@ -7,9 +7,20 @@
  * @package seed
  */
 
-get_header(); ?>
+get_header();
 
-<?php 
+$propertyType = get_field('property_type', get_the_ID());
+foreach ($propertyType as $key => $value) {
+	$propertyId		= get_term($value)->term_id;
+	$propertySlug	= get_term($value)->slug;
+	$propertyName	= get_term($value)->name;
+}
+$color = get_field('color', get_the_ID());
+$secondary_color = get_field('secondary_color', get_the_ID());
+?>
+
+
+<?php
 	$singleclass ='';
 	if ($GLOBALS['s_blog_layout_single'] == 'full-width') {
 		$singleclass = 'single-area';
@@ -28,9 +39,89 @@ get_header(); ?>
 <div class="prop-navigation">
 	<div class="s-container">
 		<ul>
-			<li class="active"><a href="#">คอนโดมิเนียม</a></li>
-			<li><a href="#">บ้าน</a></li>
+			<li<?php echo ($propertySlug == 'condominium') ? ' class="active"' : ''; ?>><a href="#">คอนโดมิเนียม</a></li>
+			<li<?php echo ($propertySlug == 'home') ? ' class="active"' : ''; ?>><a href="#">บ้าน</a></li>
 		</ul>
+	</div>
+</div>
+
+<div class="option-roomtype" data-property-type="<?php echo $propertySlug; ?>">
+	<div class="s-container">
+		<div class="option-content -top" style="background-color: <?php echo $color; ?>;">
+			<div class="option-room-type">
+				<ul id="room-type"></ul>
+			</div>
+		<?php
+
+		// $args = array(
+		//     'meta_key'          => 'issue_date',
+		//     'orderby'           => 'meta_value_num', 
+		//     'order'             => 'DESC',
+		//     'hide_empty'        => true,
+		//     'number'            => '4', 
+		//     'fields'            => 'all', 
+		// ); 
+
+		$args = array(
+			'taxonomy'        	=> 'room_type',
+			'hide_empty'        => true,
+			// 'meta_query'		=> array(
+			// 	'relation'		=> 'AND',
+			// 	array(
+			// 		'key'			=> 'project',
+			// 		'value'			=> get_the_ID(),
+			// 		'compare'		=> '='
+			// 	)
+			// )
+			// 'meta_query'        => array(
+			//   array(
+			//     'key'           => 'project', // custom field
+			//     'compare'       => '=',
+			//     'value'         => get_the_ID()// match exactly "123"
+			//   )
+			// )
+		);
+
+		// $terms = get_terms("room_type", $args);
+
+		// if ( !empty( $terms ) && !is_wp_error( $terms ) ){
+		// 	echo "<ul>";
+		// 	foreach ( $terms as $term ) {
+		// 		echo "<li><a href=\"#\" class=\"room-type\" data-term-id=\"" . $term->term_id . "\">" . $term->name . "</a></li>";
+		// 		the_field('issue_date', $term);
+		// 	}
+		// 	echo "</ul>";
+		// }
+		?>
+		</div>
+	</div>
+</div>
+
+<div class="option-unit">
+	<div class="s-container">
+		<div class="option-content" style="background-color: <?php echo $secondary_color; ?>;">
+			<div class="option-size">
+				<div class="title">ขนาดห้อง</div>
+				<select id="select-size">
+					<option value="">&nbsp;</option>
+				</select>
+			</div>
+			<div class="option-floor">
+				<div class="title">ชั้นที่</div>
+				<select id="select-floor">
+					<option value="">&nbsp;</option>
+				</select>
+			</div>
+			<div class="option-unit">
+				<div class="title">UNIT</div>
+				<select id="select-unit">
+					<option value="">&nbsp;</option>
+				</select>
+			</div>
+			<div class="label-direction">
+				<div id="label-direction" class="title"></div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -42,7 +133,7 @@ get_header(); ?>
 	</div>
 </div>
 
-<div class="s-container main-body <?php echo($singleclass);?> <?php echo '-rightbar';?>">
+<div class="s-container main-body <?php echo($singleclass);?> <?php echo '-rightbar';?>" data-project-id="<?php the_ID(); ?>">
 
     <div id="primary" class="content-area">
         <main id="main" class="site-main">
@@ -57,17 +148,17 @@ get_header(); ?>
     </div>
 
 	<aside id="rightbar" class="widget-area _heading">
-		<div class="side-reserve" style="background:<?php the_field('color', get_the_ID()); ?>">
+		<div class="side-reserve" style="background:<?php echo $color; ?>">
 			<div class="reserve">
 				<div class="title">จองเพียง</div>
-				<div class="pricing"><?php echo number_format(get_field('reserve_price', get_the_ID())); ?></div>
+				<div id="label-price" class="pricing"></div>
 			</div>
 			<div class="detail">
 				<div class="s-grid -d2">
-					<div class="unit">ยูนิต : SKV23-606</div>
-					<div class="size">ขนาด : 29.4 ตร.ม.</div>
+					<div class="unit">ยูนิต : <span id="label-unit"></span></div>
+					<div class="size">ขนาด : <span id="label-size"></span> ตร.ม.</div>
 				</div>
-				<div class="pricing">ราคา : 5,990,000 บาท</div>
+				<div class="pricing">ราคา : <span id="label-unit-price"></span> บาท</div>
 			</div>
 			<div class="form-reserve">
 				<div class="agreement">	

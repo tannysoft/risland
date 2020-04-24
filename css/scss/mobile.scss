@@ -413,8 +413,10 @@
     }
   }
   &.-minimal {
+    background-color: $primary-hover;
     text-align: center;
     .title {
+      font-size: 24px;
       font-weight: 700;
       line-height: 1em;
       color: $primary;
@@ -873,6 +875,7 @@ body.page-template-page-form .site-content {
   text-align: center;
   ul {
     list-style: none;
+    margin: 0;
     padding: 0;
     li {
       display: inline-block;
@@ -890,6 +893,67 @@ body.page-template-page-form .site-content {
       &:last-child {
         margin-right: 0;
       }
+    }
+  }
+}
+
+.option-roomtype {
+  text-align: center;
+  color: #fff;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      display: inline-block;
+      a {
+        margin: 15px 20px;
+        padding: 0px 10px;
+        display: inline-block;
+        text-transform: uppercase;
+        color: #fff;
+        border-radius: 25px;
+        border: 1px solid transparent;
+        &.active {
+          border: 1px solid #fff;
+        }
+      }
+    }
+  }
+}
+
+.option-content {
+  text-align: center;
+  color: #fff;
+  > div {
+    display: inline-block;
+    padding: 15px 20px;
+  }
+  .title {
+    display: inline-block;
+    margin-right: 10px;
+    font-family: $heading-font;
+    font-weight: 600;
+  }
+  .option-size {
+    .js-Dropdown {
+      width: 120px;
+    }
+  }
+  .option-floor {
+    .js-Dropdown {
+      width: 95px;
+    }
+  }
+  .option-unit {
+    .js-Dropdown {
+      width: 115px;
+    }
+  }
+  &.-top {
+    > div {
+      display: inline-block;
+      padding: 0 20px;
     }
   }
 }
@@ -920,6 +984,7 @@ body.page-template-page-form .site-content {
 }
 
 .price-description {
+  margin-top: 30px;
   .title {
     font-weight: 700;
     font-size: 1.9em;
@@ -930,12 +995,35 @@ body.page-template-page-form .site-content {
     font-size: 2.2em;
     line-height: 1.2em;
   }
+  .item {
+    &.-promotion {
+      margin-bottom: 30px;
+      padding: 20px;
+      color: #fff;
+      background-color: $primary;
+      .s-grid {
+        margin-bottom: 0;
+      }
+      p {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .photo-gallery,
 .floor-plan-gallery {
   img {
     width: 100%;
+  }
+}
+
+.floor-plan-gallery {
+  margin-bottom: 30px;
+  figure {
+    &:empty {
+      display: none;
+    }
   }
 }
 

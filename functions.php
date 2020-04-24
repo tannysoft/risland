@@ -162,6 +162,7 @@ add_action('widgets_init', 'seed_widgets_init');
  */
 function seed_scripts() {
 
+    // wp_enqueue_style('s-vanilla-js-dropdown', get_theme_file_uri('/vendor/vanilla-js-dropdown/vanilla-js-dropdown.css'), array(),'5.13.0');
     wp_enqueue_style('s-mobile', get_theme_file_uri('/css/mobile.css'), array(), filemtime(get_theme_file_path('/css/mobile.css')));
     wp_enqueue_style('s-desktop', get_theme_file_uri('/css/desktop.css'), array(), filemtime(get_theme_file_path('/css/desktop.css')), '(min-width: 992px)');
 
@@ -180,6 +181,8 @@ function seed_scripts() {
     if ($GLOBALS['s_flickity'] == 'enable') {
         wp_enqueue_script('s-fkt', get_theme_file_uri('/js/flickity.js'), array(), '2.2.1', true);
     }
+
+    wp_enqueue_script('s-vanilla-js-dropdown', get_theme_file_uri('/vendor/vanilla-js-dropdown/vanilla-js-dropdown.min.js'), array(), '2.2.0', true);
 
     wp_enqueue_script('s-scripts', get_theme_file_uri('/js/scripts.js'), array(), filemtime(get_theme_file_path('/js/scripts.js')), true);
     wp_enqueue_script('s-vanilla', get_theme_file_uri('/js/main-vanilla.js'), array(), filemtime(get_theme_file_path('/js/main-vanilla.js')), true);
@@ -332,4 +335,247 @@ function plant_register_required_plugins() {
 		'message'      => '',                      
 	);
 	tgmpa( $plugins, $config );
+}
+
+function risland_styles_method() {
+    $color              = get_field('color', get_the_ID());
+    $secondary_color    = get_field('secondary_color', get_the_ID());
+    if(!empty($color)) {
+        wp_register_style( 'color-custom-style', false );
+        wp_enqueue_style( 'color-custom-style' );
+
+        $custom_css = "
+        .js-Dropdown-title {
+            color: $color;
+        }
+        .js-Dropdown-list li {
+            color: $color;
+        }
+        .js-Dropdown-list li.is-selected {
+            background-color: $color;
+        }
+        .js-Dropdown-list li:hover {
+            background-color: $secondary_color;
+            color: #fff;
+        }
+        .js-Dropdown-title:after {
+            border-color: $color transparent transparent transparent;
+        }";
+        wp_add_inline_style( 'color-custom-style', $custom_css );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'risland_styles_method' );
+
+add_action( 'rest_api_init', function () {
+    register_rest_route( 'risland/v1', '/project/(?P<id>\d+)', array(
+      'methods' => 'GET',
+      'callback' => 'risland_get_project_unit',
+    ) );
+} );
+
+function risland_get_project_unit( $data ) {
+
+    foreach((array)$data as $key => $value) {
+        foreach($value['GET'] as $dataKey => $dataValue) {
+            if($dataKey == 'room_type') {
+                $roomType = $dataValue;
+            }
+            if($dataKey == 'room_size') {
+                $roomSize = $dataValue;
+            }
+            if($dataKey == 'floor') {
+                $floor = $dataValue;
+            }
+            if($dataKey == 'unit_id') {
+                $unitId = $dataValue;
+            }
+        }
+    }
+
+    $args = array(
+        'post_type'         => 'product',
+        'meta_query'	    => array(
+            'relation'		=> 'AND',
+            array(
+                'key'		=> 'project',
+                'value'		=> $data['id'],
+                'compare'	=> '='
+            ),
+            // array(
+            //     'key'		=> 'attendees',
+            //     'value'		=> 100,
+            //     'type'		=> 'NUMERIC',
+            //     'compare'	=> '>'
+            // )
+        ),
+        'posts_per_page'    => -1
+        // 'tax_query' => array(
+        //     array(
+        //         'taxonomy' => 'people',
+        //         'field'    => 'slug',
+        //         'terms'    => 'bob',
+        //     ),
+        // ),
+    );
+
+    if(!empty($roomType)) {
+        $roomTypeArgs = array(
+            'taxonomy' => 'room_type',
+            'field'    => 'term_id',
+            'terms'    => (int)$roomType,
+        );
+    }
+    if(!empty($roomSize)) {
+        $roomSizeArgs = array(
+            'taxonomy' => 'room_type',
+            'field'    => 'term_id',
+            'terms'    => (int)$roomSize,
+        );
+    }
+    if(!empty($floor)) {
+        $floorArgs = array(
+            'taxonomy' => 'room_type',
+            'field'    => 'term_id',
+            'terms'    => (int)$floor,
+        );
+    }
+
+    $args['tax_query'] = array($roomTypeArgs);
+
+    if(!empty($unitId)) {
+        $args['p'] = (int)$unitId;
+    }
+
+    $query = new WP_Query( $args );
+
+    // The Loop
+    if ( $query->have_posts() ) {
+        $i = 0;
+        while ( $query->have_posts() ) {
+            $query->the_post();
+
+            $propertyType = get_the_terms( get_the_id(), 'product_cat' );
+            unset($propertyTypeData);
+            $x = 0;
+
+            foreach($propertyType as $key => $value) {
+                $propertyTypeData[$x]['id']         = $value->term_id;
+                $propertyTypeData[$x]['name']       = $value->name;
+                $x++;
+            }
+
+            $roomType = get_the_terms( get_the_id(), 'room_type' );
+            unset($roomTypeData);
+            $x = 0;
+            foreach($roomType as $key => $value) {
+                unset($roomTypeGroupItem);
+
+                $roomTypeGroupItem['id']        = $value->term_id;
+                $roomTypeGroupItem['name']      = $value->name;
+
+                $roomTypeGroup[$value->term_id] = $roomTypeGroupItem;
+
+                $roomTypeData[$x]['id']         = $value->term_id;
+                $roomTypeData[$x]['name']       = $value->name;
+                $x++;
+            }
+
+            $roomSize = get_the_terms( get_the_id(), 'room_size' );
+            unset($roomSizeData);
+            $x = 0;
+            foreach($roomSize as $key => $value) {
+                unset($roomSizeGroupItem);
+
+                $roomSizeGroupItem['id']        = $value->term_id;
+                $roomSizeGroupItem['name']      = $value->name;
+
+                $roomSizeGroup[$value->term_id] = $roomSizeGroupItem;
+                
+                $roomSizeData[$x]['id']         = $value->term_id;
+                $roomSizeData[$x]['name']       = $value->name;
+                $x++;
+            }
+
+            $floor = get_the_terms( get_the_id(), 'floor' );
+            unset($floorData);
+            $x = 0;
+            foreach($floor as $key => $value) {
+                $floorData[$x]                  = (int)$value->name;
+                $floorGroup[(int)$value->name]  = (int)$value->name;
+                $x++;
+            }
+
+            $direction = get_the_terms( get_the_id(), 'direction' );
+            unset($directionData);
+            $x = 0;
+            foreach($direction as $key => $value) {
+                $directionData[$x]              = $value->name;
+                $x++;
+            }
+
+            $items[$i]['id']                    = get_the_id();
+            $items[$i]['title']                 = get_the_title();
+            $items[$i]['property_type']         = $propertyTypeData;
+            $items[$i]['room_type']             = $roomTypeData;
+            $items[$i]['room_size']             = $roomSizeData;
+            $items[$i]['floor']                 = $floorData;
+            $items[$i]['direction']             = $directionData;
+
+            $product                            = wc_get_product( get_the_id() );
+            $items[$i]['price']                 = (int)$product->get_price();
+            $items[$i]['unit_price']            = (int)get_field('unit_price', get_the_id());
+            if(get_field('floor_plan', get_the_id())) {
+                $items[$i]['floor_plan']['id']      = get_field('floor_plan', get_the_id())['ID'];
+                $items[$i]['floor_plan']['title']   = get_field('floor_plan', get_the_id())['title'];
+                $items[$i]['floor_plan']['url']     = get_field('floor_plan', get_the_id())['url'];
+            }
+            $items[$i]['promotion']             = get_field('promotion', get_the_id());
+            $items[$i]['reserve_price']         = (int)get_field('reserve_price', get_the_id());
+            $items[$i]['contract']              = (int)get_field('contract', get_the_id());
+            $items[$i]['deposit_price']         = (int)get_field('deposit_price', get_the_id());
+            $items[$i]['deposit_period']        = (int)get_field('deposit_period', get_the_id());
+            $items[$i]['transfer']              = (int)get_field('transfer', get_the_id());
+            $items[$i]['per_period']            = (int)get_field('per_period', get_the_id());
+            // $return[$i]['room_type']         = get_field('room_type', get_the_id());
+
+            // $return[$i]['room_type']         = get_the_terms( get_the_id(), 'room_type' );
+            // echo '<li>' . get_the_title() . '</li>';
+            $i++;
+        }
+
+        foreach($roomTypeGroup as $key => $value) {
+            $return['room_types'][]     = $value;
+            // $roomTypeGroupSort[]     = $value;
+        }
+
+        // usort($roomTypeGroupSort, function($a, $b) {
+        //     return $a->id < $b->id ? 0 : -1;
+        // });
+
+        // $return['room_types'][]      = $roomTypeGroupSort;
+
+        foreach($roomSizeGroup as $key => $value) {
+            $return['room_sizes'][]     = $value;
+        }
+
+        foreach($floorGroup as $key => $value) {
+            $return['floors'][]         = $value;
+        }
+
+        $return['items']                = $items;
+    } else {
+    // no posts found
+    }
+    /* Restore original Post Data */
+    wp_reset_postdata();
+
+    // $posts = get_posts( array(
+    //   'id' => $data['id'],
+    // ) );
+   
+    if ( empty( $return ) ) {
+      return null;
+    }
+   
+    return $return;
 }

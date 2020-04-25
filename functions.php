@@ -341,8 +341,20 @@ function plant_register_required_plugins() {
 }
 
 function risland_styles_method() {
-    $color              = get_field('color', get_the_ID());
-    $secondary_color    = get_field('secondary_color', get_the_ID());
+    if(is_checkout()) {
+        foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+            $_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
+            if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
+                $projectId          = (int)get_field('project', $cart_item['product_id']);
+                $color              = get_field('color', $projectId);
+                $secondary_color    = get_field('secondary_color', $projectId);
+            }
+        }
+    } else {
+        $color              = get_field('color', get_the_ID());
+        $secondary_color    = get_field('secondary_color', get_the_ID());
+    }
+
     if(!empty($color)) {
         wp_register_style( 'color-custom-style', false );
         wp_enqueue_style( 'color-custom-style' );
@@ -363,6 +375,9 @@ function risland_styles_method() {
         }
         .js-Dropdown-title:after {
             border-color: $color transparent transparent transparent;
+        }
+        #main .woocommerce-checkout {
+            background-color: $color;
         }";
         wp_add_inline_style( 'color-custom-style', $custom_css );
     }

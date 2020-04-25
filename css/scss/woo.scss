@@ -357,10 +357,21 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     width: 100%;
   }
 }
+.woocommerce form .form-row input.input-text {
+  border: 0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.13);
+}
+.select2-container--default .select2-selection--single {
+  border: 0;
+}
 /* FORM */
 #main .woocommerce {
   form {
     .required {
+      display: none;
       color: #c30;
       text-decoration: none;
       vertical-align: -2px;
@@ -427,7 +438,9 @@ html:lang(th) .woocommerce-Price-currencySymbol {
 /* CHECKOUT */
 #main {
   .woocommerce-checkout {
-    padding-top: 10px;
+    margin: 0 auto;
+    padding-top: 30px;
+    padding-bottom: 0;
   }
   .col2-set {
     width: auto;
@@ -461,6 +474,9 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     }
   }
   #customer_details {
+    padding-bottom: 40px;
+    font-family: $heading-font;
+    color: #fff;
     .col-1,
     .col-2 {
       width: 100%;
@@ -468,7 +484,8 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     }
     @media (min-width: 992px) {
       width: 100%;
-      margin-right: 0;
+      max-width: 590px;
+      margin: 0 auto;
       padding-right: 0;
     }
   }
@@ -479,13 +496,15 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     }
   }
   #order_review_heading {
-    border: 2px solid #222;
+    background-color: #fff;
+    border: 0;
     border-bottom: none;
     margin: 0;
     padding: 15px 20px 0;
   }
   #order_review {
-    border: 2px solid #222;
+    border: 0;
+    background-color: #fff;
     border-top: none;
     padding: 10px 20px 20px;
     th,
@@ -496,6 +515,9 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     }
     .woocommerce-checkout-review-order-table {
       thead {
+        th {
+          display: none;
+        }
         th,
         td {
           border-top: none;
@@ -596,6 +618,19 @@ html:lang(th) .woocommerce-Price-currencySymbol {
   margin-bottom: 20px;
 }
 
+#title_profile_field {
+  margin-bottom: 0!important;
+  text-align: center;
+  font-weight: 700;
+}
+
+#title_address_field {
+  margin-bottom: 10px!important;
+  padding-top: 60px;
+  text-align: center;
+  font-weight: 700;
+}
+
 /* RECIEVED */
 #main .woocommerce-order {
   h2 {
@@ -674,6 +709,11 @@ html:lang(th) .woocommerce-Price-currencySymbol {
       border-bottom: 1px solid #e3e3e3;
       background-color: #fff;
     }
+  }
+}
+.woocommerce-billing-fields {
+  > h3 {
+    display: none;
   }
 }
 /* MY ACCOUNT */
@@ -815,6 +855,7 @@ html:lang(th) .woocommerce-Price-currencySymbol {
 @media (min-width: 992px) {
   /* == WOOCOMMERCE == */
   #main .woocommerce .shop_table {
+    display: none;
     td,
     th {
       padding-left: 0;
@@ -833,6 +874,9 @@ html:lang(th) .woocommerce-Price-currencySymbol {
       .form-row-first,
       .form-row-last {
         width: 48%;
+      }
+      .form-row-first {
+        clear: both;
       }
     }
   }

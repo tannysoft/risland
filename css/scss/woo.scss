@@ -1,6 +1,6 @@
 // out: ../woo.css, compress: true, sourceMap: false, autoprefixer: last 5 versions, groupmedia: true
 /* == WOOCOMMERCE == */
-@import "variables";
+@import "_variables.scss";
 
 .button {
   display: flex;
@@ -431,8 +431,8 @@ html:lang(th) .woocommerce-Price-currencySymbol {
   }
   .col2-set {
     width: auto;
-    margin-left: -15px;
-    margin-right: -15px;
+    margin-left: 0;
+    margin-right: 0;
     h3 {
       margin-bottom: 15px;
     }
@@ -467,17 +467,15 @@ html:lang(th) .woocommerce-Price-currencySymbol {
       max-width: 100%;
     }
     @media (min-width: 992px) {
-      float: left;
-      width: 60%;
+      width: 100%;
       margin-right: 0;
-      padding-right: 10px;
+      padding-right: 0;
     }
   }
   #order_review_heading,
   #order_review {
     @media (min-width: 992px) {
-      float: right;
-      width: 40%;
+      width: 100%;
     }
   }
   #order_review_heading {

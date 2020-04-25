@@ -1172,6 +1172,18 @@ body.page-template-page-form .site-content {
   }
 }
 
+/* == WOOCOMMERCE CUSTOM == */
+
+.checkout-image {
+  img {
+    width: 100%;
+  }
+}
+
+.woocommerce-form-coupon-toggle {
+  display: none;
+}
+
 /* == FOOTER == */
 .site-footer-space {
   min-height: $footer-m-height;

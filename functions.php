@@ -40,7 +40,7 @@ if (!isset($GLOBALS['s_jquery']))               {$GLOBALS['s_jquery']           
 if (!isset($GLOBALS['s_fontawesome']))          {$GLOBALS['s_fontawesome']          = 'disable';}       // disable, enable
 if (!isset($GLOBALS['s_flickity']))             {$GLOBALS['s_flickity']             = 'enable';}        // disable, enable
 if (!isset($GLOBALS['s_wp_comments']))          {$GLOBALS['s_wp_comments']          = 'disable';}       // disable, enable
-if (!isset($GLOBALS['s_admin_bar']))            {$GLOBALS['s_admin_bar']            = 'hide';}          // hide, show
+if (!isset($GLOBALS['s_admin_bar']))            {$GLOBALS['s_admin_bar']            = 'show';}          // hide, show
 
 /* CHECK WOOCOMMERCE */
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -171,7 +171,7 @@ function seed_scripts() {
     }
 
     if ($GLOBALS['s_is_woo']) {
-        wp_enqueue_style('s-woo', get_theme_file_uri('/css/woo.css'));
+        wp_enqueue_style('s-woo', get_theme_file_uri('/css/woo.css'), array(), filemtime(get_theme_file_path('/css/woo.css')));
     }
 
     if ($GLOBALS['s_fontawesome'] == 'enable') {
@@ -182,10 +182,13 @@ function seed_scripts() {
         wp_enqueue_script('s-fkt', get_theme_file_uri('/js/flickity.js'), array(), '2.2.1', true);
     }
 
-    wp_enqueue_script('s-vanilla-js-dropdown', get_theme_file_uri('/vendor/vanilla-js-dropdown/vanilla-js-dropdown.min.js'), array(), '2.2.0', true);
-
     wp_enqueue_script('s-scripts', get_theme_file_uri('/js/scripts.js'), array(), filemtime(get_theme_file_path('/js/scripts.js')), true);
     wp_enqueue_script('s-vanilla', get_theme_file_uri('/js/main-vanilla.js'), array(), filemtime(get_theme_file_path('/js/main-vanilla.js')), true);
+
+    if(is_single() && get_post_type()=='project') {
+        wp_enqueue_script('s-vanilla-js-dropdown', get_theme_file_uri('/vendor/vanilla-js-dropdown/vanilla-js-dropdown.min.js'), array(), '2.2.0', true);
+        wp_enqueue_script('s-project', get_theme_file_uri('/js/project.js'), array(), filemtime(get_theme_file_path('/js/project.js')), true);
+    }
 
     if (($GLOBALS['s_jquery'] == 'enable') || $GLOBALS['s_is_woo']) {
         wp_enqueue_script('s-jquery', get_theme_file_uri('/js/main-jquery.js'), array('jquery'), filemtime( get_theme_file_path('/js/main-jquery.js')), true);

@@ -825,10 +825,10 @@ if ( class_exists( 'WooCommerce' ) ) {
 				'element'  => '#main .related.products > h2, #main .wc-tabs li.active, #main .wc-tabs li:hover',
 				'property' => 'border-top-color',
             ],
-			[
-				'element'  => '#main #order_review_heading, #main #order_review',
-				'property' => 'border-color',
-            ],
+			// [
+			// 	'element'  => '#main #order_review_heading, #main #order_review',
+			// 	'property' => 'border-color',
+            // ],
 			[
 				'element'  => '#content #main .woocommerce-pagination .current, #content #main .woocommerce-pagination .page-numbers:hover, #content #main .woocommerce-pagination .page-numbers:focus',
 				'property' => 'border-color',

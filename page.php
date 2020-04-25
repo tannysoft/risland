@@ -46,59 +46,59 @@ get_header();
 </div>
 <?php endif; ?>
 <?php
+if(is_checkout()) {
+    foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+        $_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 
-foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-    $_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
+        if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
+            $projectId = (int)get_field('project', $cart_item['product_id']);
 
-    if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
-        $projectId = (int)get_field('project', $cart_item['product_id']);
+            $color = get_field('color', $projectId);
+            $secondary_color = get_field('secondary_color', $projectId);
 
-        $color = get_field('color', $projectId);
-        $secondary_color = get_field('secondary_color', $projectId);
+            $roomType = get_the_terms( $cart_item['product_id'], 'room_type' );
+            unset($roomTypeName);
+            foreach($roomType as $key => $value) {
+                $roomTypeName = $value->name;
+            }
 
-        $roomType = get_the_terms( $cart_item['product_id'], 'room_type' );
-        unset($roomTypeName);
-        foreach($roomType as $key => $value) {
-            $roomTypeName = $value->name;
+            $direction = get_the_terms( $cart_item['product_id'], 'direction' );
+            unset($directionName);
+            foreach($direction as $key => $value) {
+                $directionName = $value->name;
+            }
+
+            $roomSize = get_the_terms( $cart_item['product_id'], 'room_size' );
+            unset($roomSizeName);
+            foreach($roomSize as $key => $value) {
+                $roomSizeName = $value->name;
+            }
+
+            $floor = get_the_terms( $cart_item['product_id'], 'floor' );
+            unset($floorName);
+            foreach($floor as $key => $value) {
+                $floorName = (int)$value->name;
+            }
+
+            $unitPrice = number_format((int)get_field('unit_price', $cart_item['product_id']));
+
+            echo '<div class="s-container">';
+
+            echo '<div class="checkout-image">';
+            echo get_the_post_thumbnail( $projectId, 'post_thumbnail', array( 'class' => 'img-responsive' ) );
+            echo '</div>';
+
+            echo '<div class="order-description" style="background-color: ' . $color . ';">';
+            echo '<div class="title-confirm"><h2>ยืนยันการจอง</h2></div>';
+            echo '<div class="title-confirm"><h3>' . $roomTypeName . ' - ' . get_the_title($projectId) . '</h3></div>';
+            echo '<div class="title-confirm"><h4><span>ยูนิต : ' . $_product->get_name() . '&nbsp;' . $directionName . '</span><span>ขนาด : ' . $roomSizeName . ' ตร.ม.</span><span>ชั้น : ' . $floorName . '</span><span>ราคา : ' . $unitPrice . ' บาท</span></h4></div>';
+            echo '<div class="order-line"></div>';
+            echo '</div>';
+
+            echo '</div>';
         }
-
-        $direction = get_the_terms( $cart_item['product_id'], 'direction' );
-        unset($directionName);
-        foreach($direction as $key => $value) {
-            $directionName = $value->name;
-        }
-
-        $roomSize = get_the_terms( $cart_item['product_id'], 'room_size' );
-        unset($roomSizeName);
-        foreach($roomSize as $key => $value) {
-            $roomSizeName = $value->name;
-        }
-
-        $floor = get_the_terms( $cart_item['product_id'], 'floor' );
-        unset($floorName);
-        foreach($floor as $key => $value) {
-            $floorName = (int)$value->name;
-        }
-
-        $unitPrice = number_format((int)get_field('unit_price', $cart_item['product_id']));
-
-        echo '<div class="s-container">';
-
-        echo '<div class="checkout-image">';
-        echo get_the_post_thumbnail( $projectId, 'post_thumbnail', array( 'class' => 'img-responsive' ) );
-        echo '</div>';
-
-        echo '<div class="order-description" style="background-color: ' . $color . ';">';
-        echo '<div class="title-confirm"><h2>ยืนยันการจอง</h2></div>';
-        echo '<div class="title-confirm"><h3>' . $roomTypeName . ' - ' . get_the_title($projectId) . '</h3></div>';
-        echo '<div class="title-confirm"><h4><span>ยูนิต : ' . $_product->get_name() . '&nbsp;' . $directionName . '</span><span>ขนาด : ' . $roomSizeName . ' ตร.ม.</span><span>ชั้น : ' . $floorName . '</span><span>ราคา : ' . $unitPrice . ' บาท</span></h4></div>';
-        echo '<div class="order-line"></div>';
-        echo '</div>';
-
-        echo '</div>';
     }
 }
-
 ?>
 
 <div class="s-container main-body">

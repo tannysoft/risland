@@ -435,6 +435,10 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     }
   }
 }
+.woocommerce-error {
+  font-family: $heading-font;
+  color: #fff;
+}
 /* CHECKOUT */
 #main {
   .woocommerce-checkout {
@@ -496,6 +500,7 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     }
   }
   #order_review_heading {
+    display: none;
     background-color: #fff;
     border: 0;
     border-bottom: none;
@@ -506,7 +511,8 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     border: 0;
     background-color: #fff;
     border-top: none;
-    padding: 10px 20px 20px;
+    margin: 0;
+    padding: 10px 0 20px;
     th,
     td {
       padding-top: 3px;
@@ -562,7 +568,11 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     .form-row {
       margin-bottom: 3px;
     }
+    .woocommerce-privacy-policy-text {
+      display: none;
+    }
     .payment_methods {
+      display: none;
       border: none;
       padding: 0;
       li {
@@ -589,7 +599,11 @@ html:lang(th) .woocommerce-Price-currencySymbol {
       }
       .button {
         width: 100%;
+        padding-top: 8px;
+        padding-bottom: 4px;
         font-size: 1.3em;
+        line-height: 1.3em;
+        border-radius: 3px;
       }
     }
     .woocommerce-terms-and-conditions {
@@ -909,4 +923,27 @@ html .woocommerce .loader:before {
 html .woocommerce .blockUI.blockOverlay {
   width: calc(100% + 40px) !important;
   margin-left: -20px !important;
+}
+
+.reserve-content {
+  margin: 0 auto;
+  max-width: 485px;
+}
+
+.reserve-price {
+  padding-top: 25px;
+  .label-price {
+    font-family: $heading-font;
+    font-weight: 500;
+    color: #30293e;
+  }
+  .total-price {
+    font-family: $heading-font;
+    font-weight: 700;
+    font-size: 2.6em;
+    line-height: 1.6em;
+  }
+  .woocommerce-Price-currencySymbol {
+    display: none;
+  }
 }

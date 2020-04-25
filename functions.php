@@ -378,7 +378,14 @@ function risland_styles_method() {
         }
         #main .woocommerce-checkout {
             background-color: $color;
-        }";
+        }
+        .total-price {
+            color: $color;
+        }
+        #main #payment .place-order .button {
+            background-color: $color;
+        }
+        ";
         wp_add_inline_style( 'color-custom-style', $custom_css );
     }
 }

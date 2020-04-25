@@ -151,6 +151,8 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
   
     var request = new XMLHttpRequest();
     request.open('GET', `/wp-json/risland/v1/project/${projectId}?items=all${roomTypeQuery}${roomSizeQuery}${floorQuery}${unitQuery}`, true);
+
+    console.log(`/wp-json/risland/v1/project/${projectId}?items=all${roomTypeQuery}${roomSizeQuery}${floorQuery}${unitQuery}`);
   
     request.onload = function() {
       if (this.status >= 200 && this.status < 400) {

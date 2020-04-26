@@ -283,11 +283,11 @@ Kirki::add_field( 'plant', [
 			'element'  => '.site-header a:hover, .site-nav-d .sub-menu li > a:hover',
 			'property' => 'color',
         ],
-		[
-			'choice'   => 'active',
-			'element'  => '.site-header a:active, .site-nav-d li.current-menu-item > a, .site-nav-d li.current-menu-ancestor > a, .site-nav-d li.current_page_item > a',
-			'property' => 'color',
-		],
+		// [
+		// 	'choice'   => 'active',
+		// 	'element'  => '.site-header a:active, .site-nav-d li.current-menu-item > a, .site-nav-d li.current-menu-ancestor > a, .site-nav-d li.current_page_item > a',
+		// 	'property' => 'color',
+		// ],
 		[
 			'choice'   => 'active_bg',
 			'element'  => '.site-header li:active, .site-nav-d li.current-menu-item, .site-nav-d li.current-menu-ancestor, .site-nav-d li.current_page_item',
@@ -1118,11 +1118,11 @@ Kirki::add_field( 'plant', [
 		'link_hover'=> '#ffffff',
 	],
 	'output' => [
-		[
-			'choice'   => 'bg',
-			'element'  => '.woocommerce .button:not(.kt-button), #page .button:not(.kt-button)',
-			'property' => 'background',
-        ],
+		// [
+		// 	'choice'   => 'bg',
+		// 	'element'  => '.woocommerce .button:not(.kt-button), #page .button:not(.kt-button)',
+		// 	'property' => 'background',
+        // ],
         [
 			'choice'   => 'bg_hover',
 			'element'  => '.woocommerce .button:not(.kt-button):hover, #page .button:not(.kt-button):hover',
@@ -1147,12 +1147,12 @@ Kirki::add_field( 'plant', [
 	'label'       => esc_html__( 'Border Radius', 'plant' ),
 	'section'     => 'general',
 	'default'     => '50px',
-	'output' => [
-		[
-			'element'  => '#page .button:not(.kt-button)',
-			'property' => 'border-radius',
-		],
-	],
+	// 'output' => [
+	// 	[
+	// 		'element'  => '#page .button:not(.kt-button)',
+	// 		'property' => 'border-radius',
+	// 	],
+	// ],
 ] );
 
 

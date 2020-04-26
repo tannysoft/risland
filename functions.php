@@ -611,3 +611,49 @@ function remove_cart_item_before_add_to_cart( $passed, $product_id, $quantity ) 
         WC()->cart->empty_cart();
     return $passed;
 }
+
+add_action('template_redirect','check_if_logged_in');
+function check_if_logged_in()
+{
+    $pageid = 20; // your checkout page id
+    if(!is_user_logged_in() && is_page($pageid))
+    {
+        // $url = add_query_arg(
+        //     'redirect_to',
+        //     get_permalink($pagid),
+        //     site_url('/my-account/') // your my acount url
+        // );
+        wp_redirect(site_url('/my-account/'));
+        exit;
+    }
+}
+
+function iconic_login_redirect($redirect) {
+    global $woocommerce;
+    if ( $woocommerce->cart->cart_contents_count > 0 ) {
+        return wc_get_checkout_url();
+    } else {
+        return site_url();
+    }
+    // $redirect_page_id = url_to_postid( $redirect );
+    // $checkout_page_id = wc_get_page_id( 'checkout' );
+    
+    // if( $redirect_page_id == $checkout_page_id ) {
+    //     return $redirect;
+    // }
+ 
+    // return wc_get_page_permalink( 'shop' );
+}
+ 
+add_filter( 'woocommerce_login_redirect', 'iconic_login_redirect' );
+
+// After registration, logout the user and redirect to home page
+function custom_registration_redirect() {
+    global $woocommerce;
+    if ( $woocommerce->cart->cart_contents_count > 0 ) {
+        return wc_get_checkout_url();
+    } else {
+        return home_url('/');
+    }   
+}
+add_action('woocommerce_registration_redirect', 'custom_registration_redirect', 2);

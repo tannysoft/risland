@@ -179,14 +179,16 @@ function seed_title() {
 */
 function seed_member_menu() {
 	$m_menu  = '<a href="' . $GLOBALS['s_member_url'] . '" class="m-user">';
-	$m_menu .= '<span class="pic">';
-	$current_user = wp_get_current_user(); 
+	
+	$current_user = wp_get_current_user();
 	if( 0 != $current_user->ID) { 
+		$m_menu .= '<span class="pic">';
 		$m_menu .= get_avatar($current_user->ID, 64 ); 
-	} else {  
-		$m_menu .= '<i class="si-user"></i>';
-	} 
-	$m_menu .= '</span>';
+		$m_menu .= '</span>';
+		$m_menu .= '<span class="name">';
+		$m_menu .= $current_user->data->user_nicename; 
+		$m_menu .= '</span>';
+	}
 	$m_menu .= '</a>';
 	echo $m_menu;
 }

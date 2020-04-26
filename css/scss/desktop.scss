@@ -177,6 +177,14 @@ body.headbar-d {
       }
     }
   }
+  &.-logged-in {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: flex-end;
+    .name {
+      margin-left: 8px;
+    }
+  }
 }
 .site-member {
   position: relative;

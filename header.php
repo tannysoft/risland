@@ -47,8 +47,13 @@
                     <?php seed_header_action($GLOBALS['s_right_area'], $GLOBALS['s_right_area_phone'], $GLOBALS['s_right_area_custom'] ); ?>
                 </div>
 
-                <nav id="site-nav-d" class="site-nav-d _desktop">
+                <?php $current_user = wp_get_current_user();?>
+                <nav id="site-nav-d" class="site-nav-d _desktop<?php echo ( 0 != $current_user->ID) ? ' -logged-in' : ''; ?>">
+                    <?php if( 0 != $current_user->ID) : ?>
+                    <?php seed_member_menu(); ?>
+                    <?php else: ?>
                     <?php wp_nav_menu( array( 'theme_location' => 'primary', 'menu_id' => 'primary-menu' ) );?>
+                    <?php endif; ?>
                 </nav>
 
 

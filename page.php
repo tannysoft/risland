@@ -12,6 +12,11 @@
  * @package seed
  */
 
+// if(!is_user_logged_in() && is_checkout()) {
+//     wp_redirect( get_site_url() . '/my-account', 301 );
+//     exit;
+// }
+
 get_header();
 
 // $propertyType = get_field('property_type', get_the_ID());
@@ -26,16 +31,18 @@ get_header();
 ?>
 <?php while ( have_posts() ) : the_post(); ?>
 
-<?php if(!is_front_page() && is_checkout() == false) seed_banner_title(get_the_ID()); ?>
+<?php if(!is_front_page() && is_checkout() == false && !is_page('my-account')) seed_banner_title(get_the_ID()); ?>
 
-<?php if(is_checkout() == true): ?>
-<div class="main-header -minimal">
+<?php if(is_checkout() == true || is_page('my-account')): ?>
+    <div class="main-header -minimal">
 	<div class="s-container">
 		<div class="main-title _heading">
 			<div class="title">ONLINE BOOKING</div>
 		</div>
 	</div>
 </div>
+<?php endif; ?>
+<?php if(is_checkout() == true): ?>
 <div class="prop-navigation">
 	<div class="s-container">
 		<ul>

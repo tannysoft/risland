@@ -260,8 +260,8 @@ a.s-button,
     &.-m1\.4 {
       margin-right: -#{$space-d/2};
     }
-    margin-left: -#{$space-d/2};
-    margin-right: -#{$space-d/2};
+    margin-left: 0;
+    margin-right: 0;
     .slider {
       padding: 0 #{$space-d/2} $space-d;
       width: 100%;

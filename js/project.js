@@ -41,12 +41,26 @@ document.addEventListener("DOMContentLoaded", function() {
     var projectIdSelector     = document.querySelector('.single-area');
   
     if(propertyTypeSelector) {
-      propertyType  = document.querySelector('.option-roomtype').getAttribute('data-property-type');
+      propertyType  = propertyTypeSelector.getAttribute('data-property-type');
     }
   
     if(projectIdSelector) {
-      projectId     = document.querySelector('.single-area').getAttribute('data-project-id');
+      projectId     = projectIdSelector.getAttribute('data-project-id');
     }
+
+    var sizeSelect = new CustomSelect({
+      elem: 'select-size'
+    });
+    
+    if(propertyType == 'condominium') {
+      var floorSelect = new CustomSelect({
+        elem: 'select-floor'
+      });
+    }
+      
+    var unitSelect = new CustomSelect({
+      elem: 'select-unit'
+    });
   
     getUnitData();
 });
@@ -57,14 +71,15 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
       floor   = null;
       unitId  = null;
   
-      var floorSelector = document.getElementById('custom-select-floor');
-  
-      if(floorSelector) {
-        document.getElementById('custom-select-floor').remove();
-        document.getElementById('select-floor').innerHTML = '<option value="">&nbsp;</option>';
-        var floorSelect = new CustomSelect({
-          elem: 'select-floor'
-        });
+      if(propertyType == 'condominium') {
+        var floorSelector = document.getElementById('custom-select-floor');
+        if(floorSelector) {
+          document.getElementById('custom-select-floor').remove();
+          document.getElementById('select-floor').innerHTML = '<option value="">&nbsp;</option>';
+          var floorSelect = new CustomSelect({
+            elem: 'select-floor'
+          });
+        }
       }
   
       var unitSelector  = document.getElementById('custom-select-unit');
@@ -160,7 +175,7 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
         var data = JSON.parse(this.response);
   
         if(roomTypeLoad === true) {
-          var roomTypeItems = '';
+          var roomTypeItems = (propertyType == 'condominium') ? '<li>ROOMTYPE</li>' : '<li>TYPE</li>';
           data.room_types.forEach(function (item) {
             roomTypeItems += `<li><a href="#" class="room-type" data-term-id="${item.id}">${item.name}</a></li>`;
           });
@@ -180,7 +195,7 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
           });
         }
   
-        if(roomType !== null && floorLoad == true) {
+        if(roomType !== null && floorLoad == true && propertyType == 'condominium') {
           var floorItems = '';
           document.getElementById('custom-select-floor').remove();
           floorItems += `<option value="">เลือกชั้น</option>`;
@@ -193,7 +208,7 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
           });
         }
   
-        if(roomType !== null && unitLoad == true) {
+        if((roomType !== null && unitLoad == true && propertyType == 'condominium') || (roomType !== null && propertyType == 'home' && floorLoad == true)) {
           var unitItems = '';
           document.getElementById('custom-select-unit').remove();
           unitItems += `<option value="">เลือกยูนิต</option>`;
@@ -238,15 +253,3 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
   
     request.send();
 }
-
-var sizeSelect = new CustomSelect({
-    elem: 'select-size'
-});
-  
-var floorSelect = new CustomSelect({
-    elem: 'select-floor'
-});
-  
-var unitSelect = new CustomSelect({
-    elem: 'select-unit'
-});

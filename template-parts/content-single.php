@@ -2,6 +2,12 @@
 /**
  * Loop Name: Content Post Detail
  */
+$propertyType = get_field('property_type', get_the_ID());
+foreach ($propertyType as $key => $value) {
+	$propertyId		= get_term($value)->term_id;
+	$propertySlug	= get_term($value)->slug;
+	$propertyName	= get_term($value)->name;
+}
 $color = get_field('color', get_the_ID());
 ?>
 
@@ -27,54 +33,90 @@ $color = get_field('color', get_the_ID());
         </p>
         <?php the_content(); ?>
         <div class="photo-gallery">
-            <figure class="wp-block-image size-full">
-                <img src="<?php echo get_template_directory_uri(); ?>/img/demo-room1.jpg" alt="" />
-            </figure>
+            <?php 
+            $images = get_field('gallery');
+            $size = 'full'; // (thumbnail, medium, large, full or custom size)
+            if( $images ): ?>
+                <div class="s-slider -dots-in">
+                    <?php foreach( $images as $image_id ): ?>
+                        <div class="slider">
+                            <?php echo wp_get_attachment_image( $image_id, $size ); ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
 
         <div class="floor-plan-gallery">
             <figure id="pic-floorplan" class="wp-block-image size-full" style="padding: 30px; background-color: <?php echo $color; ?>;"></figure>
         </div>
 
-        <div class="project-description">
-            <div class="item">
-                <div class="title">จำนวนอาคาร</div>
-                <div class="desc"><?php the_field('buildings', get_the_ID()); ?></div>
+        <div class="s-grid -d2">
+
+            <div class="project-description">
+                <div class="item">
+                    <div class="title"><?php echo ($propertySlug == 'condominium') ? 'จำนวนอาคาร' : 'จำนวนเฟส'; ?></div>
+                    <div class="desc"><?php the_field('buildings', get_the_ID()); ?></div>
+                </div>
+                <div class="item">
+                    <div class="title">ยูนิตทั้งหมด</div>
+                    <div class="desc"><?php the_field('units', get_the_ID()); ?> ยูนิต</div>
+                </div>
+                <div class="item">
+                    <div class="title">พื้นที่โครงการ</div>
+                    <div class="desc"><?php the_field('area', get_the_ID()); ?></div>
+                </div>
+                <?php if($propertySlug == 'condominium'): ?>
+                <div class="item">
+                    <div class="title">ที่จอดรถ</div>
+                    <div class="desc"><?php the_field('park', get_the_ID()); ?></div>
+                </div>
+                <?php endif; ?>
+                <div class="item -bottom">
+                    <div class="title">คาดการ<br />โครงการแล้วเสร็จ</div>
+                    <div class="desc"><?php the_field('completion_expected', get_the_ID()); ?></div>
+                </div>
             </div>
-            <div class="item">
-                <div class="title">ยูนิตทั้งหมด</div>
-                <div class="desc"><?php the_field('units', get_the_ID()); ?></div>
+
+            <div class="room-description">
+                <?php if( have_rows('room_type') ): ?>
+                    <div class="item">
+                        <div class="title"><?php echo ($propertySlug == 'condominium') ? 'ประเภทห้อง' : 'ประเภทบ้าน'; ?></div>
+                    </div>
+                    <?php while( have_rows('room_type') ): the_row(); 
+                        // vars
+                        $name = get_sub_field('name');
+                        $size = get_sub_field('size');
+                    ?>
+                        <div class="item<?php echo ($propertySlug == 'home') ? ' -home' : ''; ?>">
+                            <?php if( $name ): ?>
+                                <div class="title"><?php echo $name; ?></div>
+                            <?php endif; ?>
+                            <?php if( $size ): ?>
+                                <div class="desc"><?php echo $size; ?></div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endwhile; ?>
+                <?php endif; ?>
             </div>
-            <div class="item">
-                <div class="title">พื้นที่โครงการ</div>
-                <div class="desc"><?php the_field('area', get_the_ID()); ?></div>
-            </div>
-            <div class="item">
-                <div class="title">ที่จอดรถ</div>
-                <div class="desc"><?php the_field('park', get_the_ID()); ?></div>
-            </div>
+
         </div>
 
-        <div class="room-description">
-            <?php if( have_rows('room_type') ): ?>
+        <div class="s-grid">
+            <div class="facility-description">
                 <div class="item">
-                    <div class="title">ประเภทห้อง</div>
+                    <div class="title">สิ่งอำนวยความสะดวก</div>
+                    <div class="desc"><?php the_field('facility', get_the_ID()); ?></div>
                 </div>
-                <?php while( have_rows('room_type') ): the_row(); 
-                    // vars
-                    $name = get_sub_field('name');
-                    $size = get_sub_field('size');
-                ?>
-                    <div class="item">
-                        <?php if( $name ): ?>
-                            <div class="title"><?php echo $name; ?></div>
-                        <?php endif; ?>
-                        <?php if( $size ): ?>
-                            <div class="desc"><?php echo $size; ?></div>
-                        <?php endif; ?>
-                    </div>
-                <?php endwhile; ?>
-            <?php endif; ?>
+            </div>
+        </div>
+        <div class="s-grid">
+            <div class="maps-description">
+                <div class="item">
+                    <div class="title">แผนที่</div>
+                    <?php echo get_field('maps', get_the_id()); ?>
+                </div>
+            </div>
         </div>
 
         <div class="price-description">
@@ -128,7 +170,7 @@ $color = get_field('color', get_the_ID());
             </div>
             <div class="more-condition">
                 <p><a href="#">เงื่อนไขของยูนิต</a></p>
-                <p><a href="#">เงื่อนไขการจองออนไลน์</a></p>
+                <p><a href="<?php echo wp_get_attachment_url(get_field('booking_conditions', get_the_id())); ?>">เงื่อนไขการจองออนไลน์</a></p>
             </div>
         </div>
         <?php wp_link_pages( array('before' => '<div class="page-links">' . esc_html__( 'Pages:', 'seed' ),'after'  => '</div>') ); ?>

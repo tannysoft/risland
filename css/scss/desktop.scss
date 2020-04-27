@@ -337,11 +337,31 @@ body.page-template-page-form .site-content {
 .room-description {
   .item {
     .title {
-      width: 200px;
+      width: 150px;
     }
     .desc {
-      width: calc(100% - 205px);
+      width: calc(100% - 155px);
     }
+    &.-home {
+      .title {
+        width: 80px;
+      }
+      .desc {
+        width: calc(100% - 85px);
+      }
+    }
+  }
+}
+.room-description {
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -30px;
+    width: 1px;
+    height: 100%;
+    background-color: #707070;
   }
 }
 .entry-author {

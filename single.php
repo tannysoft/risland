@@ -101,17 +101,19 @@ $secondary_color = get_field('secondary_color', get_the_ID());
 	<div class="s-container">
 		<div class="option-content" style="background-color: <?php echo $secondary_color; ?>;">
 			<div class="option-size">
-				<div class="title">ขนาดห้อง</div>
+				<div class="title"><?php echo ($propertySlug == 'condominium') ? 'ขนาดห้อง' : 'ขนาดบ้าน'; ?></div>
 				<select id="select-size">
 					<option value="">&nbsp;</option>
 				</select>
 			</div>
+			<?php if($propertySlug == 'condominium'): ?>
 			<div class="option-floor">
 				<div class="title">ชั้นที่</div>
 				<select id="select-floor">
 					<option value="">&nbsp;</option>
 				</select>
 			</div>
+			<?php endif; ?>
 			<div class="option-unit">
 				<div class="title">UNIT</div>
 				<select id="select-unit">

@@ -906,16 +906,35 @@ body.page-template-page-form .site-content {
     padding: 0;
     li {
       display: inline-block;
+      position: relative;
       a {
         margin: 15px 20px;
         padding: 0px 10px;
         display: inline-block;
         text-transform: uppercase;
+        font-family: $heading-font;
         color: #fff;
         border-radius: 25px;
         border: 1px solid transparent;
         &.active {
           border: 1px solid #fff;
+          font-weight: 700;
+        }
+      }
+      &:first-child {
+        padding-right: 50px;
+        margin: 16px 20px 16px 20px;
+        font-size: .8em;
+        line-height: 2em;
+        vertical-align: top;
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 1px;
+          height: 28px;
+          background-color: #fff;
         }
       }
     }
@@ -950,6 +969,15 @@ body.page-template-page-form .site-content {
       width: 115px;
     }
   }
+  .label-direction {
+    padding: 0;
+    .title {
+      padding: 15px 20px;
+      &:empty {
+        display: none;
+      }
+    }
+  }
   &.-top {
     > div {
       display: inline-block;
@@ -965,22 +993,65 @@ body.page-template-page-form .site-content {
 }
 
 .project-description,
-.room-description {
+.room-description,
+.facility-description,
+.maps-description {
+  font-size: .9em;
   font-weight: 400;
   .item {
     .title {
       display: inline-block;
       width: 49.5%;
+      font-weight: 600;
     }
     .desc {
       display: inline-block;
       width: 49.5%;
     }
+    &.-bottom {
+      margin-top: 30px;
+    }
   }
 }
 
 .room-description {
-  margin-top: 15px;
+  margin-top: 0;
+  div {
+    &:first-child {
+      .title {
+        font-weight: 600;
+      }
+    }
+  }
+  .item {
+    .title {
+      font-weight: 400;
+    }
+  }
+}
+
+.facility-description {
+  .item {
+    .title {
+      width: auto;
+      padding-right: 30px;
+    }
+    .desc {
+      width: auto;
+    }
+  }
+}
+
+.maps-description {
+  .item {
+    .title {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    iframe {
+      width: 100%;
+    }
+  }
 }
 
 .price-description {

@@ -169,8 +169,9 @@ $color = get_field('color', get_the_ID());
                 </div>
             </div>
             <div class="more-condition">
-                <p><a href="#">เงื่อนไขของยูนิต</a></p>
-                <p><a href="<?php echo wp_get_attachment_url(get_field('booking_conditions', get_the_id())); ?>">เงื่อนไขการจองออนไลน์</a></p>
+                <p class="title">เงื่อนไขของยูนิต</p>
+                <?php the_field('unit_conditions', get_the_ID()); ?>
+                <p class="title online"><a href="<?php echo wp_get_attachment_url(get_field('booking_conditions', get_the_id())); ?>">เงื่อนไขการจองออนไลน์</a></p>
             </div>
         </div>
         <?php wp_link_pages( array('before' => '<div class="page-links">' . esc_html__( 'Pages:', 'seed' ),'after'  => '</div>') ); ?>

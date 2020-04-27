@@ -988,3 +988,11 @@ html .woocommerce .blockUI.blockOverlay {
     font-weight: 700;
   }
 }
+
+.woocommerce-order-pay {
+  .checkout-image,
+  .order-description,
+  .prop-navigation {
+    display: none;
+  }
+}

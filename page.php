@@ -53,7 +53,7 @@ get_header();
 </div>
 <?php endif; ?>
 <?php
-if(is_checkout()) {
+if(is_checkout() == true) {
     foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
         $_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 

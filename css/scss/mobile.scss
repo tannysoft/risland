@@ -1099,9 +1099,18 @@ body.page-template-page-form .site-content {
 }
 
 .more-condition {
+  .title {
+    font-size: 1.3em;
+  }
   p {
     margin-bottom: .3em;
-    font-size: 1.3em;
+    font-size: 1em;
+  }
+  .online {
+    margin-top: 30px;
+  }
+  a {
+    color: $text;
   }
 }
 

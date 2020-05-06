@@ -273,11 +273,11 @@ Kirki::add_field( 'plant', [
 			'element'  => '.site-header, .site-header a, .site-nav-d .sub-menu li > a',
 			'property' => 'color',
         ],
-        [
-			'choice'   => 'link',
-			'element'  => '.site-toggle b, .site-toggle b:after, .site-toggle b:before',
-			'property' => 'background-color',
-		],
+        // [
+		// 	'choice'   => 'link',
+		// 	'element'  => '.site-toggle b, .site-toggle b:after, .site-toggle b:before',
+		// 	'property' => 'background-color',
+		// ],
 		[
 			'choice'   => 'hover',
 			'element'  => '.site-header a:hover, .site-nav-d .sub-menu li > a:hover',

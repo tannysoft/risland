@@ -41,10 +41,10 @@ body.headbar-d {
 }
 .site-branding {
   position: relative;
-  bottom: 12px;
-  left: auto;
-  transform: none;
+  top: 50%;
+  left: 0;
   height: 20px;
+  transform: translate(0,-50%);
   img {
     max-height: $header-d-height;
   }
@@ -79,7 +79,7 @@ body.headbar-d {
     height: 100%;
     list-style: none;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     flex-direction: column;
     text-align: center;
     transition: 0.3s ease-in-out;
@@ -87,6 +87,7 @@ body.headbar-d {
       display: block;
       position: relative;
       padding: 12px 17px;
+      font-size: .9em;
       &:after {
         content: '';
         display: inline-block;
@@ -179,8 +180,7 @@ body.headbar-d {
   }
   &.-logged-in {
     display: flex;
-    margin-bottom: 8px;
-    align-items: flex-end;
+    align-items: center;
     .name {
       margin-left: 8px;
     }
@@ -239,6 +239,15 @@ body.headbar-d {
 .main-header {
   margin-bottom: $space-d / 2;
   padding-top: $space-d;
+  padding-bottom: 0;
+  .breadcrumbs {
+    display: block;
+    text-align: left;
+    font-family: $heading-font;
+    font-size: .8em;
+    letter-spacing: 1.3px;
+    color: #fff;
+  }
   &.-banner {
     padding-bottom: $space-d - 4;
     min-height: $title-d-height;
@@ -249,8 +258,14 @@ body.headbar-d {
   }
   &.-minimal {
     margin-bottom: 25px;
-    padding-top: 40px;
-    padding-bottom: 22px;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    .title {
+      font-size: 30px;
+    }
   }
   .title {
     font-size: $title-d-size;
@@ -328,10 +343,75 @@ body.page-template-page-form .site-content {
 }
 /* SINGLE - AUTHOR PROFILE */
 .prop-navigation {
-  margin-bottom: 27px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: auto;
+  width: auto;
+  transform: translate(-50%,-50%);
+  ul {
+    li {
+      a {
+        color: #fff;
+      }
+    }
+  }
+}
+.project-option {
+  margin-bottom: 0;
+  .option-roomtype {
+    order: 1;
+  }
+  .option-unit {
+    order: 2;
+  }
+  .single-pic {
+    order: 3;
+  }
+}
+.option-roomtype {
+  ul {
+    li {
+      width: auto;
+      a {
+        height: auto;
+        margin: 15px 30px;
+        display: inline-block;
+        font-size: 1em;
+        line-height: 1.65em;
+        opacity: 1;
+        border: 1px solid transparent;
+        &:hover {
+          font-weight: 700;
+          border: 1px solid #fff;
+        }
+      }
+    }
+  }
 }
 .single-pic {
   margin-bottom: 40px;
+  img {
+    height: 406px;
+  }
+}
+.option-content {
+  > div {
+    padding: 15px 20px;
+  }
+  .title {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .js-Dropdown {
+    display: inline-block;
+  }
+  &.-top {
+    > div {
+      display: inline-block;
+      padding: 0 20px;
+    }
+  }
 }
 .project-description,
 .room-description {
@@ -340,14 +420,14 @@ body.page-template-page-form .site-content {
       width: 150px;
     }
     .desc {
-      width: calc(100% - 155px);
+      width: calc(100% - 160px);
     }
     &.-home {
       .title {
         width: 80px;
       }
       .desc {
-        width: calc(100% - 85px);
+        width: calc(100% - 90px);
       }
     }
   }
@@ -364,6 +444,57 @@ body.page-template-page-form .site-content {
     background-color: #707070;
   }
 }
+.maps-description {
+  .item {
+    margin-left: 0;
+    margin-right: 0;
+    .title {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    iframe {
+      height: 450px;
+    }
+  }
+}
+.price-description {
+  font-size: 1em;
+  text-align: left;
+  .item {
+    &.-promotion {
+      margin-left: 0;
+      margin-right: 0;
+      padding: 20px;
+      text-align: left;
+    }
+  }
+}
+
+.floor-plan-gallery  {
+  padding: 30px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.more-condition {
+  margin-bottom: 0;
+}
+
+.side-reserve {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 23px 25px 12px;
+  .reserve {
+    .title {
+      display: block;
+      line-height: 1em;
+    }
+    .pricing {
+      display: block;
+    }
+  }
+}
+
 .entry-author {
   margin-top: 40px;
   text-align: left;
@@ -395,6 +526,31 @@ body.page-template-page-form .site-content {
 
 /* == SIDEBAR == */
 
+/* == WOOCOMMERCE CUSTOM == */
+
+.checkout-image {
+  img {
+    height: 406px;
+  }
+}
+
+.order-description {
+  padding-bottom: 25px;
+  h2 {
+    font-size: 1.6em;
+  }
+  h3 {
+    font-size: 1.6em;
+  }
+  h4 {
+    font-size: 1.1em;
+  }
+  .order-line {
+    margin: 60px auto 0;
+    max-width: 670px;
+  }
+}
+
 /* FOOTER */
 
 .site-login {
@@ -405,4 +561,7 @@ body.page-template-page-form .site-content {
 }
 .site-footer {
   min-height: $footer-d-height;
+}
+.site-footpage {
+  text-align: left;
 }

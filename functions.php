@@ -42,6 +42,30 @@ if (!isset($GLOBALS['s_flickity']))             {$GLOBALS['s_flickity']         
 if (!isset($GLOBALS['s_wp_comments']))          {$GLOBALS['s_wp_comments']          = 'disable';}       // disable, enable
 if (!isset($GLOBALS['s_admin_bar']))            {$GLOBALS['s_admin_bar']            = 'show';}          // hide, show
 
+if( function_exists('acf_add_options_page') ) {
+
+	acf_add_options_page(array(
+		'page_title' 	=> 'Theme General Settings',
+		'menu_title'	=> 'Theme Settings',
+		'menu_slug' 	=> 'theme-general-settings',
+		'capability'	=> 'edit_posts',
+		'redirect'		=> false
+	));
+
+	acf_add_options_sub_page(array(
+		'page_title' 	=> 'Theme Header Settings',
+		'menu_title'	=> 'Header',
+		'parent_slug'	=> 'theme-general-settings',
+	));
+
+	acf_add_options_sub_page(array(
+		'page_title' 	=> 'Theme Footer Settings',
+		'menu_title'	=> 'Footer',
+		'parent_slug'	=> 'theme-general-settings',
+	));
+
+}
+
 /* CHECK WOOCOMMERCE */
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
 if (is_plugin_active('woocommerce/woocommerce.php')) {
@@ -180,6 +204,11 @@ function seed_scripts() {
     
     if ($GLOBALS['s_flickity'] == 'enable') {
         wp_enqueue_script('s-fkt', get_theme_file_uri('/js/flickity.js'), array(), '2.2.1', true);
+    }
+
+    if(is_single() && get_post_type()=='project') {
+        wp_enqueue_script('s-mobile-detect', get_theme_file_uri('/js/mobile-detect.min.js'), array(), '3.3.1', true);
+        wp_enqueue_script('s-sticky-sidebar', get_theme_file_uri('/js/sticky-sidebar.min.js'), array(), '3.3.1', true);
     }
 
     wp_enqueue_script('s-scripts', get_theme_file_uri('/js/scripts.js'), array(), filemtime(get_theme_file_path('/js/scripts.js')), true);
@@ -361,7 +390,7 @@ function risland_styles_method() {
 
         $custom_css = "
         .js-Dropdown-title {
-            color: $color;
+            background: $color;
         }
         .js-Dropdown-list li {
             color: $color;
@@ -374,12 +403,21 @@ function risland_styles_method() {
             color: #fff;
         }
         .js-Dropdown-title:after {
-            border-color: $color transparent transparent transparent;
+            border-color: #fff transparent transparent transparent;
+        }
+        .option-roomtype ul li:first-child {
+            color: $color;
+        }
+        .floor-plan-gallery {
+            background-color: $color;
         }
         #main .woocommerce-checkout {
             background-color: $color;
         }
         .total-price {
+            color: $color;
+        }
+        .side-reserve .form-reserve .buttons .btn:hover {
             color: $color;
         }
         #main #payment .place-order .button {
@@ -401,18 +439,20 @@ add_action( 'rest_api_init', function () {
 function risland_get_project_unit( $data ) {
 
     foreach((array)$data as $key => $value) {
-        foreach($value['GET'] as $dataKey => $dataValue) {
-            if($dataKey == 'room_type') {
-                $roomType = $dataValue;
-            }
-            if($dataKey == 'room_size') {
-                $roomSize = $dataValue;
-            }
-            if($dataKey == 'floor') {
-                $floor = $dataValue;
-            }
-            if($dataKey == 'unit_id') {
-                $unitId = $dataValue;
+        if(!empty($value['GET'])) {
+            foreach($value['GET'] as $dataKey => $dataValue) {
+                if($dataKey == 'room_type') {
+                    $roomType = $dataValue;
+                }
+                if($dataKey == 'room_size') {
+                    $roomSize = $dataValue;
+                }
+                if($dataKey == 'floor') {
+                    $floor = $dataValue;
+                }
+                if($dataKey == 'unit_id') {
+                    $unitId = $dataValue;
+                }
             }
         }
     }
@@ -452,20 +492,22 @@ function risland_get_project_unit( $data ) {
     }
     if(!empty($roomSize)) {
         $roomSizeArgs = array(
-            'taxonomy' => 'room_type',
+            'taxonomy' => 'room_size',
             'field'    => 'term_id',
             'terms'    => (int)$roomSize,
         );
     }
     if(!empty($floor)) {
         $floorArgs = array(
-            'taxonomy' => 'room_type',
+            'taxonomy' => 'floor',
             'field'    => 'term_id',
             'terms'    => (int)$floor,
         );
     }
 
-    $args['tax_query'] = array($roomTypeArgs);
+    $args['tax_query'] = array(
+        'relation' => 'AND', $roomTypeArgs, $roomSizeArgs, $floorArgs
+    );
 
     if(!empty($unitId)) {
         $args['p'] = (int)$unitId;
@@ -526,9 +568,19 @@ function risland_get_project_unit( $data ) {
             unset($floorData);
             $x = 0;
             foreach($floor as $key => $value) {
-                $floorData[$x]                  = (int)$value->name;
-                $floorGroup[(int)$value->name]  = (int)$value->name;
+                unset($floorGroupItem);
+
+                $floorGroupItem['id']        = $value->term_id;
+                $floorGroupItem['name']      = $value->name;
+
+                $floorGroup[$value->term_id] = $floorGroupItem;
+                
+                $floorData[$x]['id']         = $value->term_id;
+                $floorData[$x]['name']       = $value->name;
                 $x++;
+                // $floorData[$x]                  = (int)$value->name;
+                // $floorGroup[(int)$value->name]  = (int)$value->name;
+                // $x++;
             }
 
             $direction = get_the_terms( get_the_id(), 'direction' );
@@ -538,6 +590,17 @@ function risland_get_project_unit( $data ) {
                 $directionData[$x]              = $value->name;
                 $x++;
             }
+
+            unset($perPeriodData);
+            $y = 0;
+            if( have_rows('per_period_price') ):
+                while ( have_rows('per_period_price') ) : the_row();
+                    // display a sub field value
+                    $perPeriodData[$y]['name'] = get_sub_field('name');
+                    $perPeriodData[$y]['price'] = get_sub_field('price');
+                    $y++;
+                endwhile;
+           endif;
 
             $items[$i]['id']                    = get_the_id();
             $items[$i]['title']                 = get_the_title();
@@ -560,7 +623,11 @@ function risland_get_project_unit( $data ) {
             $items[$i]['deposit_price']         = (int)get_field('deposit_price', get_the_id());
             $items[$i]['deposit_period']        = (int)get_field('deposit_period', get_the_id());
             $items[$i]['transfer']              = (int)get_field('transfer', get_the_id());
-            $items[$i]['per_period']            = (int)get_field('per_period', get_the_id());
+            if(!empty($perPeriodData)) {
+                $items[$i]['per_period']        = $perPeriodData;
+            }
+            // $items[$i]['per_period']            = get_field('per_period', get_the_id());
+
             // $return[$i]['room_type']         = get_field('room_type', get_the_id());
 
             // $return[$i]['room_type']         = get_the_terms( get_the_id(), 'room_type' );
@@ -657,3 +724,111 @@ function custom_registration_redirect() {
     }   
 }
 add_action('woocommerce_registration_redirect', 'custom_registration_redirect', 2);
+
+add_filter( 'wpseo_breadcrumb_links', 'wpseo_breadcrumb_add_woo_shop_link' );
+
+function wpseo_breadcrumb_add_woo_shop_link( $links ) {
+    global $post;
+
+    $propertyType = get_field('property_type', get_the_ID());
+    if($propertyType) {
+        foreach ($propertyType as $key => $value) {
+            $propertyId		= get_term($value)->term_id;
+            $propertySlug	= get_term($value)->slug;
+            $propertyName	= get_term($value)->name;
+        }
+    }
+    //get_permalink( woocommerce_get_page_id( 'shop' ) )
+
+    if ( get_post_type() == 'project' ) {
+        $breadcrumb[] = array(
+            'url' => site_url() . '/' . $propertySlug,
+            'text' => $propertyName,
+        );
+
+        array_splice( $links, 1, -2, $breadcrumb );
+    }
+
+    return $links;
+}
+
+add_filter( 'woocommerce_order_button_text', 'woo_custom_order_button_text' ); 
+
+function woo_custom_order_button_text() {
+    return __( 'จองเลย', 'woocommerce' ); 
+}
+
+add_filter( 'wc_order_statuses', 'wc_renaming_order_status' );
+function wc_renaming_order_status( $order_statuses ) {
+    foreach ( $order_statuses as $key => $status ) {
+        if ( 'wc-processing' === $key ) 
+            $order_statuses['wc-processing'] = _x( 'ชำระเงินแล้ว', 'Order status', 'woocommerce' );
+    }
+    return $order_statuses;
+}
+
+function risland_send_sms($order, $status) {
+
+    require 'sendMessageService.php';
+
+    //var_dump($order->get_order_number());
+	foreach ( $order->get_items() as $item_id => $item ) {
+		$product_id = $item->get_product_id();
+		$variation_id = $item->get_variation_id();
+		$product = $item->get_product();
+		$name = $item->get_name();
+		$quantity = $item->get_quantity();
+		$subtotal = $item->get_subtotal();
+		$total = $item->get_total();
+		$tax = $item->get_subtotal_tax();
+		$taxclass = $item->get_tax_class();
+		$taxstat = $item->get_tax_status();
+		$allmeta = $item->get_meta_data();
+		// $somemeta = $item->get_meta( '_whatever', true );
+		$type = $item->get_type();
+	}
+
+    $projectId = (int)get_field('project', $product_id);
+    $projectName = get_the_title($projectId);
+
+	$unitPrice = number_format((int)get_field('unit_price', $product_id));
+
+	$total = $order->get_total();
+	$strTotal = $total . ' บาท';
+
+    // define account and password
+    $account = 'post01@risland1';
+    $password = '4D5AB7783DF2DD6A71651140D179ABD5C81420CEAABCE23E09301A479534014A';
+
+    $mobile_no = $order->billing_phone;
+    // or $mobile_no = '0830000000,0831111111';
+    $message = "ทางบริษัทฯ ขอขอบคุณสำหรับการจองโครงการ$projectName ยูนิต $name ค่าเงินจองที่ชำระแล้ว $strTotal ติดต่อเจ้าหน้าที่ 020266888";
+    $category = 'General';
+    $sender_name = '';
+
+    $results = SendMessageService::sendMessage($account, $password, $mobile_no, $message, '', $category, $sender_name);
+
+    // use http proxy
+    // $proxy = 'localhost:8888';
+    // $proxy_userpwd = 'username:password';
+    // $results = SendMessageService::sendMessage($account, $password, $mobile_no, $message, '', $category, $sender_name, $proxy, $proxy_userpwd);
+
+    if ($results['result']) {
+        // echo 'Send Success.'.' Task ID='.$results['task_id'].', Message ID='.$results['message_id'];
+        $to = get_option('admin_email');
+        $subject = 'Risland Online Send SMS Success!';
+        $body = 'Send Success.'.' Task ID='.$results['task_id'].', Message ID='.$results['message_id'];
+        $headers = array('Content-Type: text/html; charset=UTF-8','From: Risland Online &lt;noreply@risland.co.th');
+
+        wp_mail( $to, $subject, $body, $headers );
+    } else {
+        // echo $results['error'];
+        $to = get_option('admin_email');
+        $subject = 'Risland Online Send SMS Error!';
+        $body = $results['error'];
+        $headers = array('Content-Type: text/html; charset=UTF-8','From: Risland Online &lt;noreply@risland.co.th');
+
+        wp_mail( $to, $subject, $body, $headers );
+    }
+
+}

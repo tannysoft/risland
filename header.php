@@ -10,11 +10,28 @@
         if ( function_exists( 'plant_css' ) ) { plant_css(); }
         if ( function_exists( 'plant_var' ) ) { plant_var(); } 
     ?>
-</head>
+    <?php echo get_field('google_analytics', 'option'); ?>
+    <?php echo get_field('google_tag_manager_head', 'option'); ?>
 
+    <!-- Start of risland Zendesk Widget script -->
+    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=bc6744f3-881e-42da-8830-9a71c84b6a8b"> </script>
+    <!-- End of risland Zendesk Widget script -->
+</head>
+<?php
+$propertyType = get_field('property_type', get_the_ID());
+
+if(!empty($propertyType)) {
+    foreach ($propertyType as $key => $value) {
+        $propertyId		= get_term($value)->term_id;
+        $propertySlug	= get_term($value)->slug;
+        $propertyName	= get_term($value)->name;
+    }
+}
+?>
 <?php $bodyClass = ''; if (is_active_sidebar( 'headbar_d' )) { $bodyClass = 'headbar-d'; } if (is_active_sidebar( 'headbar_m' )) { $bodyClass .= ' headbar-m'; } ?>
 
 <body <?php body_class($bodyClass); ?>>
+    <?php echo get_field('google_tag_manager_body', 'option'); ?>
     <?php 
     if ( function_exists( 'wp_body_open' ) ) {
         wp_body_open();
@@ -37,6 +54,15 @@
                 <div class="site-branding">
                     <div class="site-logo"><?php seed_logo(); ?></div>
                     <?php seed_title(); ?>
+                </div>
+
+                <div class="prop-navigation _desktop">
+                    <div class="s-container">
+                        <ul>
+                            <li<?php echo ($propertySlug == 'condominium' || empty($propertySlug) && is_page('home')==false) ? ' class="active"' : ''; ?>><a href="<?php echo site_url() . '/condominium'; ?>">คอนโดมิเนียม</a></li>
+                            <li<?php echo ($propertySlug == 'home' || is_page('home')) ? ' class="active"' : ''; ?>><a href="<?php echo site_url() . '/home'; ?>">บ้าน</a></li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="action-left">
@@ -118,3 +144,29 @@
 		?>
 
         <div id="content" class="site-content">
+
+        <div class="main-header -minimal">
+            <div class="s-container">
+                <div class="s-grid -d3 -middle">
+                    <div class="breadcrumbs">
+                        <?php
+                        if ( function_exists('yoast_breadcrumb') ) {
+                            yoast_breadcrumb( '<p id="breadcrumbs">','</p>' );
+                        }
+                        ?>
+                    </div>
+                    <div class="main-title _heading">
+                        <div class="title">ONLINE BOOKING</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="prop-navigation _mobile">
+            <div class="s-container">
+                <ul>
+                    <li<?php echo ($propertySlug == 'condominium' || empty($propertySlug) && is_page('home')==false) ? ' class="active"' : ''; ?>><a href="<?php echo site_url() . '/condominium'; ?>">คอนโดมิเนียม</a></li><!--
+                    --><li<?php echo ($propertySlug == 'home' || is_page('home')) ? ' class="active"' : ''; ?>><a href="<?php echo site_url() . '/home'; ?>">บ้าน</a></li>
+                </ul>
+            </div>
+        </div>

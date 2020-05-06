@@ -27,15 +27,7 @@ $secondary_color = get_field('secondary_color', get_the_ID());
 	} 
 ?>
 <?php while ( have_posts() ) : the_post(); ?>
-
-<div class="main-header -minimal">
-	<div class="s-container">
-		<div class="main-title _heading">
-			<div class="title">ONLINE BOOKING</div>
-		</div>
-	</div>
-</div>
-
+<?php /*
 <div class="prop-navigation">
 	<div class="s-container">
 		<ul>
@@ -44,94 +36,93 @@ $secondary_color = get_field('secondary_color', get_the_ID());
 		</ul>
 	</div>
 </div>
+*/ ?>
+<div class="project-option">
+	<div class="option-roomtype" data-property-type="<?php echo $propertySlug; ?>">
+		<div class="s-container">
+			<div class="option-content -top" style="background-color: <?php echo $color; ?>;">
+				<div class="option-room-type">
+					<ul id="room-type"></ul>
+				</div>
+			<?php
 
-<div class="option-roomtype" data-property-type="<?php echo $propertySlug; ?>">
-	<div class="s-container">
-		<div class="option-content -top" style="background-color: <?php echo $color; ?>;">
-			<div class="option-room-type">
-				<ul id="room-type"></ul>
-			</div>
-		<?php
+			// $args = array(
+			//     'meta_key'          => 'issue_date',
+			//     'orderby'           => 'meta_value_num', 
+			//     'order'             => 'DESC',
+			//     'hide_empty'        => true,
+			//     'number'            => '4', 
+			//     'fields'            => 'all', 
+			// ); 
 
-		// $args = array(
-		//     'meta_key'          => 'issue_date',
-		//     'orderby'           => 'meta_value_num', 
-		//     'order'             => 'DESC',
-		//     'hide_empty'        => true,
-		//     'number'            => '4', 
-		//     'fields'            => 'all', 
-		// ); 
+			$args = array(
+				'taxonomy'        	=> 'room_type',
+				'hide_empty'        => true,
+				// 'meta_query'		=> array(
+				// 	'relation'		=> 'AND',
+				// 	array(
+				// 		'key'			=> 'project',
+				// 		'value'			=> get_the_ID(),
+				// 		'compare'		=> '='
+				// 	)
+				// )
+				// 'meta_query'        => array(
+				//   array(
+				//     'key'           => 'project', // custom field
+				//     'compare'       => '=',
+				//     'value'         => get_the_ID()// match exactly "123"
+				//   )
+				// )
+			);
 
-		$args = array(
-			'taxonomy'        	=> 'room_type',
-			'hide_empty'        => true,
-			// 'meta_query'		=> array(
-			// 	'relation'		=> 'AND',
-			// 	array(
-			// 		'key'			=> 'project',
-			// 		'value'			=> get_the_ID(),
-			// 		'compare'		=> '='
-			// 	)
-			// )
-			// 'meta_query'        => array(
-			//   array(
-			//     'key'           => 'project', // custom field
-			//     'compare'       => '=',
-			//     'value'         => get_the_ID()// match exactly "123"
-			//   )
-			// )
-		);
+			// $terms = get_terms("room_type", $args);
 
-		// $terms = get_terms("room_type", $args);
-
-		// if ( !empty( $terms ) && !is_wp_error( $terms ) ){
-		// 	echo "<ul>";
-		// 	foreach ( $terms as $term ) {
-		// 		echo "<li><a href=\"#\" class=\"room-type\" data-term-id=\"" . $term->term_id . "\">" . $term->name . "</a></li>";
-		// 		the_field('issue_date', $term);
-		// 	}
-		// 	echo "</ul>";
-		// }
-		?>
-		</div>
-	</div>
-</div>
-
-<div class="option-unit">
-	<div class="s-container">
-		<div class="option-content" style="background-color: <?php echo $secondary_color; ?>;">
-			<div class="option-size">
-				<div class="title"><?php echo ($propertySlug == 'condominium') ? 'ขนาดห้อง' : 'ขนาดบ้าน'; ?></div>
-				<select id="select-size">
-					<option value="">&nbsp;</option>
-				</select>
-			</div>
-			<?php if($propertySlug == 'condominium'): ?>
-			<div class="option-floor">
-				<div class="title">ชั้นที่</div>
-				<select id="select-floor">
-					<option value="">&nbsp;</option>
-				</select>
-			</div>
-			<?php endif; ?>
-			<div class="option-unit">
-				<div class="title">UNIT</div>
-				<select id="select-unit">
-					<option value="">&nbsp;</option>
-				</select>
-			</div>
-			<div class="label-direction">
-				<div id="label-direction" class="title"></div>
+			// if ( !empty( $terms ) && !is_wp_error( $terms ) ){
+			// 	echo "<ul>";
+			// 	foreach ( $terms as $term ) {
+			// 		echo "<li><a href=\"#\" class=\"room-type\" data-term-id=\"" . $term->term_id . "\">" . $term->name . "</a></li>";
+			// 		the_field('issue_date', $term);
+			// 	}
+			// 	echo "</ul>";
+			// }
+			?>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div class="single-pic">
-	<div class="s-container">
-		<a href="<?php the_permalink(); ?>" title="Permalink to <?php the_title_attribute(); ?>" rel="bookmark">
-			<?php if(has_post_thumbnail()) { the_post_thumbnail('full');} else { echo '<img src="' . esc_url( get_template_directory_uri()) .'/img/thumb.jpg" alt="'. get_the_title() .'" />'; }?>
-		</a>
+	<div class="option-unit">
+		<div class="s-container">
+			<div class="option-content -detail" style="background-color: <?php echo $secondary_color; ?>;">
+				<div class="option-size">
+					<div class="title"><?php echo ($propertySlug == 'condominium') ? 'ขนาดห้อง' : 'ขนาดบ้าน'; ?></div>
+					<select id="select-size">
+						<option value="">&nbsp;</option>
+					</select>
+				</div>
+				<?php if($propertySlug == 'condominium'): ?>
+				<div class="option-floor">
+					<div class="title">ชั้นที่</div>
+					<select id="select-floor">
+						<option value="">&nbsp;</option>
+					</select>
+				</div>
+				<?php endif; ?>
+				<div class="option-unit">
+					<div class="title">UNIT</div>
+					<select id="select-unit">
+						<option value="">&nbsp;</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="single-pic">
+		<div class="s-container">
+			<a href="<?php the_permalink(); ?>" title="Permalink to <?php the_title_attribute(); ?>" rel="bookmark">
+				<?php if(has_post_thumbnail()) { the_post_thumbnail('full');} else { echo '<img src="' . esc_url( get_template_directory_uri()) .'/img/thumb.jpg" alt="'. get_the_title() .'" />'; }?>
+			</a>
+		</div>
 	</div>
 </div>
 
@@ -149,18 +140,21 @@ $secondary_color = get_field('secondary_color', get_the_ID());
         </main>
     </div>
 
-	<aside id="rightbar" class="widget-area _heading">
+	<aside id="rightbar" class="widget-area content-waiting _heading">
 		<div class="side-reserve" style="background:<?php echo $color; ?>">
 			<div class="reserve">
 				<div class="title">จองเพียง</div>
 				<div id="label-price" class="pricing"></div>
 			</div>
 			<div class="detail">
-				<div class="s-grid -d2">
-					<div class="unit">ยูนิต : <span id="label-unit"></span></div>
+				<div class="item">
+					<div class="unit">ยูนิต : <span id="label-unit"></span> | </div>
 					<div class="size">ขนาด : <span id="label-size"></span> ตร.ม.</div>
 				</div>
-				<div class="pricing">ราคา : <span id="label-unit-price"></span> บาท</div>
+				<div class="item">
+					<div class="title"><span id="label-direction"></span> | </div>
+					<div class="pricing">ราคา : <span id="label-unit-price"></span> บาท</div>
+				</div>
 			</div>
 			<div class="form-reserve">
 				<div class="agreement">	
@@ -169,7 +163,7 @@ $secondary_color = get_field('secondary_color', get_the_ID());
 				</div>
 				<div class="buttons">
 					<a href="#" id="btn-booking" class="btn">จองเลย</a>
-					<a href="#" class="btn">ติดต่อเจ้าหน้าที่</a>
+					<a href="<?php echo get_field('contact_us_page', 'option'); ?>" class="btn">ติดต่อเจ้าหน้าที่</a>
 				</div>
 			</div>
 		</div>

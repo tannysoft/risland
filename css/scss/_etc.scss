@@ -305,6 +305,7 @@ body.home .gallery,
 }
 .js-Dropdown-title {
   background: #fff;
+  color: #fff;
   border: 0;
   border-radius: 3px;
   box-sizing: border-box;
@@ -331,9 +332,7 @@ body.home .gallery,
   width: 0;
 }
 .js-Dropdown-list {
-  background: #ffffff;
-  border-left: 1px solid #a5a5a5;
-  border-right: 1px solid #a5a5a5;
+  background: #fff;
   box-sizing: border-box;
   display: none;
   height: 0;
@@ -352,9 +351,9 @@ body.home .gallery,
   opacity: 1;
 }
 .js-Dropdown-list li {
-  border-bottom: 1px solid #a5a5a5;
   cursor: pointer;
   padding: .75em 1em;
+  font-family: $heading-font;
 }
 .js-Dropdown-list li:hover {
   background-color: pink;

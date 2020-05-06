@@ -60,7 +60,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	?>
 
 	<div id="order_review" class="woocommerce-checkout-review-order">
-		<div class="reserve-content s-grid -d2">
+		<div class="reserve-content -no-gap s-grid -d2">
 			<div class="reserve-price">
 				<div class="label-price">เงินจองสุทธิ</div>
 				<div class="total-price"><?php echo $amount; ?></div>

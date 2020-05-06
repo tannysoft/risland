@@ -47,11 +47,11 @@ $color = get_field('color', get_the_ID());
             <?php endif; ?>
         </div>
 
-        <div class="floor-plan-gallery">
-            <figure id="pic-floorplan" class="wp-block-image size-full" style="padding: 30px; background-color: <?php echo $color; ?>;"></figure>
+        <div class="floor-plan-gallery content-waiting">
+            <figure id="pic-floorplan" class="wp-block-image size-full" style="background-color: <?php echo $color; ?>;"></figure>
         </div>
 
-        <div class="s-grid -d2">
+        <div class="s-grid project-description-container -d2">
 
             <div class="project-description">
                 <div class="item">
@@ -120,13 +120,13 @@ $color = get_field('color', get_the_ID());
         </div>
 
         <div class="price-description">
-            <div class="item -promotion" style="background-color: <?php echo $color; ?>;">
+            <div class="item content-waiting -promotion" style="background-color: <?php echo $color; ?>;">
                 <div class="s-grid -c3-c9">
                     <div class="title">โปรโมชั่น</div>
                     <div id="label-promotion" class="desc"><?php //the_field('promotion', get_the_ID()); ?></div>
                 </div>
             </div>
-            <div class="item -pricing">
+            <div class="item content-waiting -pricing">
                 <div class="s-grid -c3-c9 -middle">
                     <div class="title">แผนการชำระเงิน</div>
                     <div class="desc">
@@ -155,23 +155,19 @@ $color = get_field('color', get_the_ID());
                     </div>
                 </div>
             </div>
-            <div class="item -pricing">
+            <div class="item content-waiting -pricing">
                 <div class="s-grid -c3-c9 -middle">
                     <div class="title">รายละเอียดเงินดาวน์</div>
                     <div class="desc">
-                        <div class="s-grid -m2 -d3">
-                            <div class="item">
-                                <div class="label">งวดละ</div>
-                                <div id="label-per-period" class="pricing"></div>
-                            </div>
-                        </div>
+                        <div id="label-per-period" class="s-grid -m2 -d3"></div>
                     </div>
                 </div>
             </div>
             <div class="more-condition">
                 <p class="title">เงื่อนไขของยูนิต</p>
                 <?php the_field('unit_conditions', get_the_ID()); ?>
-                <p class="title online"><a href="<?php echo wp_get_attachment_url(get_field('booking_conditions', get_the_id())); ?>">เงื่อนไขการจองออนไลน์</a></p>
+                <p class="title online">เงื่อนไขการจองออนไลน์</p>
+                <p><a href="<?php echo wp_get_attachment_url(get_field('booking_conditions', get_the_id())); ?>" class="download"><img src="<?php echo get_template_directory_uri(); ?>/img/icon-download2.svg"/><span>ดาวน์โหลดเอกสาร</span></a></p>
             </div>
         </div>
         <?php wp_link_pages( array('before' => '<div class="page-links">' . esc_html__( 'Pages:', 'seed' ),'after'  => '</div>') ); ?>

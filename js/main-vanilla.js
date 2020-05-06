@@ -31,11 +31,17 @@ document.addEventListener(
         removeClass(".site-toggle, .site-nav-m", "active");
       }
     }
+    if (event.target.matches("#agree")) {
+      var isChecked = event.target.checked;
+      if (isChecked) { //checked
+        addClass("#btn-booking", "-enabled");
+      } else {
+        removeClass("#btn-booking", "-enabled");
+      }
+    }
   },
   false
 );
-
-
 
 // Mobile Menu - Add Dropdown Toggle
 document.querySelectorAll("#site-nav-m .menu-item-has-children").forEach(e => {

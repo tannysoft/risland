@@ -5,6 +5,12 @@ var roomSize      = null;
 var floor         = null;
 var unitId        = null;
 
+var md = new MobileDetect(window.navigator.userAgent);
+
+if(md.mobile() == null) {
+  var sidebar = new StickySidebar('#rightbar', {topSpacing: 80});
+}
+
 document.addEventListener(
     "click",
     function(event) {
@@ -13,14 +19,20 @@ document.addEventListener(
             removeClass(".room-type", "active");
             event.target.classList.add("active");
             roomType = event.target.getAttribute('data-term-id');
+            roomSize = null;
+            floor = null;
+            unitId = null;
             getUnitData(false, true, false, false, false, true);
         }
         if (event.target.matches("#custom-select-size ul li")) {
             roomSize = event.target.getAttribute('data-value');
-            getUnitData(false, false, true, false, false, false);
+            floor = null;
+            unitId = null;
+            getUnitData(false, false, true, false, true, true);
         }
         if (event.target.matches("#custom-select-floor ul li")) {
             floor = event.target.getAttribute('data-value');
+            unitId = null;
             getUnitData(false, false, false, true, false, false);
         }
         if (event.target.matches("#custom-select-unit ul li")) {
@@ -83,7 +95,6 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
       }
   
       var unitSelector  = document.getElementById('custom-select-unit');
-  
       if(unitSelector) {
         document.getElementById('custom-select-unit').remove();
         document.getElementById('select-unit').innerHTML = '<option value="">&nbsp;</option>';
@@ -175,14 +186,16 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
         var data = JSON.parse(this.response);
   
         if(roomTypeLoad === true) {
-          var roomTypeItems = (propertyType == 'condominium') ? '<li>ROOMTYPE</li>' : '<li>TYPE</li>';
+          var roomTypeItems = '<li>กรุณาเลือก</li>';
           data.room_types.forEach(function (item) {
             roomTypeItems += `<li><a href="#" class="room-type" data-term-id="${item.id}">${item.name}</a></li>`;
           });
           document.getElementById('room-type').innerHTML = roomTypeItems;
+          addClass(".option-content.-top", "-show");
         }
   
         if(roomType !== null && roomSizeLoad == true) {
+          addClass(".option-content.-detail", "-show");
           var roomSizeItems = '';
           document.getElementById('custom-select-size').remove();
           roomSizeItems += `<option value="">เลือกขนาด</option>`;
@@ -200,7 +213,7 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
           document.getElementById('custom-select-floor').remove();
           floorItems += `<option value="">เลือกชั้น</option>`;
           data.floors.forEach(function (item) {
-            floorItems += `<option value="${item}">${item}</option>`;
+            floorItems += `<option value="${item.id}">${item.name}</option>`;
           });
           document.getElementById('select-floor').innerHTML = floorItems;
           var floorSelect = new CustomSelect({
@@ -215,6 +228,9 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
           data.items.forEach(function (item) {
             unitItems += `<option value="${item.id}">${item.title}</option>`;
           });
+          if(data.items) {
+            addClass(".content-waiting", "-show");
+          }
           document.getElementById('select-unit').innerHTML = unitItems;
           var unitSelect = new CustomSelect({
             elem: 'select-unit'
@@ -238,7 +254,16 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
           document.getElementById('label-deposit-price').innerHTML  = data.items[0].deposit_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           document.getElementById('label-deposit-period').innerHTML = `${data.items[0].deposit_period} งวด`;
           document.getElementById('label-transfer').innerHTML       = data.items[0].transfer.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          document.getElementById('label-per-period').innerHTML     = data.items[0].per_period.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          // document.getElementById('label-per-period').innerHTML     = data.items[0].per_period.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+          var dataPerPeriod = '';
+          data.items[0].per_period.forEach(function (item) {
+            dataPerPeriod += `<div class="item">
+                <div class="label">${item.name}</div>
+                <div class="pricing">${item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+            </div>`;
+          });
+          document.getElementById('label-per-period').innerHTML     = dataPerPeriod;
         }
   
       } else {

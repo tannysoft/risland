@@ -118,6 +118,15 @@ a.s-button,
   .s-grid {
     margin-bottom: 0;
   }
+  &.-small-gap {
+    grid-gap: 10px;
+  }
+  &.-no-gap {
+    grid-gap: 0;
+  }
+  &.-middle {
+    align-items: center;
+  }
   @media (min-width: 992px) {
     grid-gap: $space-d;
     margin-bottom: $space-d;
@@ -149,8 +158,8 @@ a.s-button,
 }
 
 .s-slider {
-  margin-left: -#{$space-m/2};
-  margin-right: -#{$space-m/2};
+  margin-left: -#{$space-m};
+  margin-right: -#{$space-m};
   margin-bottom: $space-m;
   height: 100%;
   &.-large {

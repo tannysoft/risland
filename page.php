@@ -33,16 +33,25 @@ get_header();
 
 <?php if(!is_front_page() && is_checkout() == false && !is_page('my-account')) seed_banner_title(get_the_ID()); ?>
 
-<?php if(is_checkout() == true || is_page('my-account')): ?>
+<?php /* if(is_checkout() == true || is_page('my-account')): ?>
     <div class="main-header -minimal">
 	<div class="s-container">
-		<div class="main-title _heading">
-			<div class="title">ONLINE BOOKING</div>
-		</div>
+        <div class="s-grid -d3">
+            <div class="breadcrumbs">
+				<?php
+				if ( function_exists('yoast_breadcrumb') ) {
+					yoast_breadcrumb( '<p id="breadcrumbs">','</p>' );
+				}
+				?>
+			</div>
+            <div class="main-title _heading">
+                <div class="title">ONLINE BOOKING</div>
+            </div>
+        </div>
 	</div>
 </div>
-<?php endif; ?>
-<?php if(is_checkout() == true): ?>
+<?php endif; */ ?>
+<?php /* if(is_checkout() == true): ?>
 <div class="prop-navigation">
 	<div class="s-container">
 		<ul>
@@ -51,7 +60,7 @@ get_header();
 		</ul>
 	</div>
 </div>
-<?php endif; ?>
+<?php endif; */ ?>
 <?php
 if(is_checkout() == true) {
     foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
@@ -89,6 +98,7 @@ if(is_checkout() == true) {
 
             $unitPrice = number_format((int)get_field('unit_price', $cart_item['product_id']));
 
+            echo '<div class="section-checkout">';
             echo '<div class="s-container">';
 
             echo '<div class="checkout-image">';
@@ -102,6 +112,7 @@ if(is_checkout() == true) {
             echo '<div class="order-line"></div>';
             echo '</div>';
 
+            echo '</div>';
             echo '</div>';
         }
     }

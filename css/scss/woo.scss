@@ -61,6 +61,7 @@ html:lang(th) .woocommerce-Price-currencySymbol {
   visibility: hidden;
   font-size: 0.1em;
   &:before {
+    padding-left: 5px;
     content: "บาท";
     visibility: visible;
     font-size: 9em;
@@ -449,6 +450,9 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     margin: 0 auto;
     padding-top: 30px;
     padding-bottom: 0;
+    @media (max-width: 991px) {
+      margin: 0 -$space-m;
+    }
   }
   .col2-set {
     width: auto;
@@ -517,6 +521,10 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     border-top: none;
     margin: 0;
     padding: 10px 0 20px;
+    @media (max-width: 991px) {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
     th,
     td {
       padding-top: 3px;
@@ -595,16 +603,19 @@ html:lang(th) .woocommerce-Price-currencySymbol {
       margin-right: 10px;
     }
     .place-order {
-      margin-top: 20px;
       margin-bottom: 0;
       padding: 0;
+      margin-top: 20px;
+      @media (max-width: 991px) {
+        margin-top: 0;
+      }
       .wc-terms-and-conditions {
         margin-bottom: 10px;
       }
       .button {
         width: 100%;
         padding-top: 8px;
-        padding-bottom: 4px;
+        padding-bottom: 8px;
         font-size: 1.3em;
         line-height: 1.3em;
         border-radius: 3px;
@@ -630,6 +641,33 @@ html:lang(th) .woocommerce-Price-currencySymbol {
         list-style: none;
       }
     }
+  }
+}
+.woocommerce-order-received {
+  #breadcrumbs {
+    display: none;
+  }
+  #main {
+    .woocommerce-order {
+      padding-right: 0;
+    }
+    .woocommerce-order-details {
+      display: none;
+    }
+  }
+}
+
+.order-success {
+  margin-top: 30px;
+  text-align: center;
+  .button {
+    width: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 1.3em;
+    line-height: 1.3em;
+    border-radius: 0;
+    background-color: $primary;
   }
 }
 .woocommerce-checkout,
@@ -880,6 +918,9 @@ html:lang(th) .woocommerce-Price-currencySymbol {
   /* == WOOCOMMERCE == */
   #main .woocommerce .shop_table {
     display: none;
+    thead {
+      font-family: $heading-font;
+    }
     td,
     th {
       padding-left: 0;
@@ -889,6 +930,13 @@ html:lang(th) .woocommerce-Price-currencySymbol {
       &.product-subtotal {
         text-align: right;
         padding-left: 20px;
+      }
+    }
+  }
+  .woocommerce-account {
+    &.woocommerce-orders {
+      .shop_table {
+        display: inline-table!important;
       }
     }
   }
@@ -938,10 +986,17 @@ html .woocommerce .blockUI.blockOverlay {
 .reserve-content {
   margin: 0 auto;
   max-width: 485px;
+  text-align: center;
+  @media (min-width: 992px) {
+    text-align: left;
+  }
 }
 
 .reserve-price {
-  padding-top: 25px;
+  @media (min-width: 992px) {
+    padding-top: 25px;
+  }
+  
   .label-price {
     font-family: $heading-font;
     font-weight: 500;
@@ -951,7 +1006,10 @@ html .woocommerce .blockUI.blockOverlay {
     font-family: $heading-font;
     font-weight: 700;
     font-size: 2.6em;
-    line-height: 1.6em;
+    line-height: 1em;
+    @media (min-width: 992px) {
+      line-height: 1.6em;
+    }
   }
   .woocommerce-Price-currencySymbol {
     display: none;
@@ -974,6 +1032,12 @@ html .woocommerce .blockUI.blockOverlay {
   form {
     .form-row {
       padding: 0;
+      @media (max-width: 991px) {
+        width: 100%;
+      }
+      &.form-row-first {
+        clear: both;
+      }
     }
   }
 }
@@ -994,5 +1058,39 @@ html .woocommerce .blockUI.blockOverlay {
   .order-description,
   .prop-navigation {
     display: none;
+  }
+}
+
+.woocommerce-NoticeGroup {
+  margin: 0 auto;
+  max-width: 590px;
+}
+
+.woocommerce-checkout-review-order-table {
+  display: none;
+}
+
+.woocommerce-order-pay {
+  .detail-to-payment {
+    display: none;
+  }
+  .waiting-to-payment {
+    h2 {
+      margin-top: 50px;
+      font-weight: 700;
+    }
+    h3 {
+      font-size: 1.3em;
+    }
+  }
+}
+
+.woocommerce-order-received {
+  #main {
+    .woocommerce {
+      .shop_table {
+        display: block;
+      }
+    }
   }
 }

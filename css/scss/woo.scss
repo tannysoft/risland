@@ -440,9 +440,11 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     }
   }
 }
-.woocommerce-error {
-  font-family: $heading-font;
-  color: #fff;
+.woocommerce-checkout {
+  .woocommerce-error {
+    font-family: $heading-font;
+    color: #fff;
+  }
 }
 /* CHECKOUT */
 #main {
@@ -655,6 +657,10 @@ html:lang(th) .woocommerce-Price-currencySymbol {
       display: none;
     }
   }
+  .content-area {
+    padding-top: 15px;
+    padding-bottom: 45px;
+  }
 }
 
 .order-success {
@@ -674,6 +680,14 @@ html:lang(th) .woocommerce-Price-currencySymbol {
 .woocommerce-account {
   .woocommerce-message {
     display: none;
+  }
+}
+.woocommerce-account {
+  .woocommerce-privacy-policy-text {
+    display: none;
+  }
+  .woocommerce-form-register__submit {
+    margin-top: 15px!important;
   }
 }
 #account_password_field {
@@ -1093,4 +1107,48 @@ html .woocommerce .blockUI.blockOverlay {
       }
     }
   }
+}
+
+@media (max-width: 991px) {
+  .woocommerce table.shop_table_responsive tr,
+  .woocommerce-page table.shop_table_responsive tr {
+    margin-bottom: 25px;
+    padding: 10px;
+    border: 1px solid #e3e3e3;
+    td {
+      border: 0;
+    }
+  }
+  .woocommerce table.shop_table_responsive tr:nth-child(2n) td,
+  .woocommerce-page table.shop_table_responsive tr:nth-child(2n) td {
+    background-color: transparent;
+    border: 0;
+  }
+}
+
+.woocommerce-MyAccount-content {
+  font-family: $heading-font;
+}
+
+.woocommerce-edit-address {
+  .col2-set {
+    .col-1 {
+      padding-left: 0!important;
+      @media (max-width: 991px) {
+        padding-right: 0!important;
+      }
+    }
+    .col-2 {
+      display: none;
+      padding-right: 0!important;
+      @media (max-width: 991px) {
+        padding-left: 0!important;
+      }
+    }
+  }
+}
+
+.woocommerce form .show-password-input,
+.woocommerce-page form .show-password-input {
+  top: .3em;
 }

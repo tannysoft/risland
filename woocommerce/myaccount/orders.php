@@ -98,7 +98,7 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 							<?php endif; ?>
 						</td>
 						<?php if($column_id == 'order-number'): ?>
-							<td><?php echo get_the_title($projectId); ?></td>
+							<td data-title="โครงการ"><?php echo get_the_title($projectId); ?></td>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</tr>

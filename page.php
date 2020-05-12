@@ -105,10 +105,16 @@ if(is_checkout() == true) {
             echo get_the_post_thumbnail( $projectId, 'post_thumbnail', array( 'class' => 'img-responsive' ) );
             echo '</div>';
 
+            if($floorName !== 0) {
+                $floorString = '<span>ชั้น : ' . $floorName . '</span>';
+            } else {
+                $floorString = '';
+            }
+
             echo '<div class="order-description" style="background-color: ' . $color . ';">';
             echo '<div class="title-confirm"><h2>ยืนยันการจอง</h2></div>';
             echo '<div class="title-confirm"><h3>' . $roomTypeName . ' - ' . get_the_title($projectId) . '</h3></div>';
-            echo '<div class="title-confirm"><h4><span>ยูนิต : ' . $_product->get_name() . '&nbsp;' . $directionName . '</span><span>ขนาด : ' . $roomSizeName . ' ตร.ม.</span><span>ชั้น : ' . $floorName . '</span><span>ราคา : ' . $unitPrice . ' บาท</span></h4></div>';
+            echo '<div class="title-confirm"><h4><span>ยูนิต : ' . $_product->get_name() . '&nbsp;' . $directionName . '</span><span>ขนาด : ' . $roomSizeName . ' ตร.ม.</span>' . $floorString . '<span>ราคา : ' . $unitPrice . ' บาท</span></h4></div>';
             echo '<div class="order-line"></div>';
             echo '</div>';
 

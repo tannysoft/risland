@@ -181,12 +181,12 @@ function seed_member_menu() {
 	$m_menu  = '<a href="' . $GLOBALS['s_member_url'] . '" class="m-user">';
 	
 	$current_user = wp_get_current_user();
-	if( 0 != $current_user->ID) { 
+	if( 0 != $current_user->ID) {
 		$m_menu .= '<span class="pic">';
 		$m_menu .= get_avatar($current_user->ID, 64 ); 
 		$m_menu .= '</span>';
 		$m_menu .= '<span class="name">';
-		$m_menu .= $current_user->data->user_nicename; 
+		$m_menu .= $current_user->data->user_email; 
 		$m_menu .= '</span>';
 	}
 	$m_menu .= '</a>';

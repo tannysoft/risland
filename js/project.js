@@ -241,7 +241,7 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
           console.log(data.items);
           document.getElementById("btn-booking").href               = `/checkout/?add-to-cart=${data.items[0].id}`;
           document.getElementById('label-direction').innerHTML      = data.items[0].direction[0];
-          document.getElementById('label-price').innerHTML          = data.items[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          document.getElementById('label-price').innerHTML          = `${data.items[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท`;
           document.getElementById('label-unit').innerHTML           = data.items[0].title;
           document.getElementById('label-size').innerHTML           = data.items[0].room_size[0].name;
           document.getElementById('label-unit-price').innerHTML     = data.items[0].unit_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

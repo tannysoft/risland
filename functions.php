@@ -424,8 +424,73 @@ function risland_styles_method() {
             background-color: $color;
         }
         ";
+
+        
         wp_add_inline_style( 'color-custom-style', $custom_css );
     }
+
+    $font_color    = get_field('font_color', get_the_ID());
+
+    if($font_color) {
+        wp_register_style( 'font-color-custom-style', false );
+        wp_enqueue_style( 'font-color-custom-style' );
+
+        $custom_font_css = "
+        .option-roomtype ul li a {
+            color: $font_color;
+        }
+        .option-roomtype ul li a:hover {
+            border-color: $font_color;
+        }
+        .option-roomtype ul li a.active {
+            border-color: $font_color;
+        }
+        .option-roomtype ul li:first-child {
+            color: $font_color;
+        }
+        .option-content {
+            color: $font_color;
+        }
+        .js-Dropdown-title {
+            background: #fff;
+            color: $font_color;
+        }
+        .js-Dropdown-list li {
+            color: $font_color;
+        }
+        .js-Dropdown-title:after {
+            border-color: $font_color transparent transparent transparent;
+        }
+        .js-Dropdown-list li.is-selected {
+            color: $font_color;
+        }
+        .js-Dropdown-list li:hover {
+            color: $font_color;
+        }
+        .price-description .item.-promotion {
+            color: $font_color;
+        }
+        .side-reserve {
+            color: $font_color;
+        }
+        .side-reserve .reserve {
+            border-bottom: 1px solid $font_color;
+        }
+        .side-reserve .reserve .title {
+            color: $font_color;
+        }
+        .side-reserve .detail {
+            color: $font_color;
+        }
+        .side-reserve .form-reserve .buttons .btn {
+            border-color: $font_color;
+            color: $font_color;
+        }
+        ";
+
+        wp_add_inline_style( 'font-color-custom-style', $custom_font_css );
+    }
+
 }
 add_action( 'wp_enqueue_scripts', 'risland_styles_method' );
 
@@ -672,12 +737,19 @@ function risland_get_project_unit( $data ) {
     return $return;
 }
 
-add_filter( 'woocommerce_add_to_cart_validation', 'remove_cart_item_before_add_to_cart', 20, 3 );
-function remove_cart_item_before_add_to_cart( $passed, $product_id, $quantity ) {
-    if( ! WC()->cart->is_empty() )
-        WC()->cart->empty_cart();
-    return $passed;
+add_filter( 'woocommerce_add_to_cart_validation', 'bbloomer_only_one_in_cart', 99, 2 );
+   
+function bbloomer_only_one_in_cart( $passed, $added_product_id ) {
+   wc_empty_cart();
+   return $passed;
 }
+
+// add_filter( 'woocommerce_add_to_cart_validation', 'remove_cart_item_before_add_to_cart', 20, 3 );
+// function remove_cart_item_before_add_to_cart( $passed, $product_id, $quantity ) {
+//     if( ! WC()->cart->is_empty() )
+//         WC()->cart->empty_cart();
+//     return $passed;
+// }
 
 add_action('template_redirect','check_if_logged_in');
 function check_if_logged_in()

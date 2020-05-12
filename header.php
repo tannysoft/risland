@@ -69,11 +69,15 @@ if(!empty($propertyType)) {
                     <?php seed_header_action($GLOBALS['s_left_area'], $GLOBALS['s_left_area_phone'], $GLOBALS['s_left_area_custom'] ); ?>
                 </div>
 
-                <div class="action-right">
+                <?php $current_user = wp_get_current_user();?>
+                <div class="action-right _mobile">
+                    <?php if( 0 != $current_user->ID) : ?>
+                    <?php seed_member_menu(); ?>
+                    <?php else: ?>
                     <?php seed_header_action($GLOBALS['s_right_area'], $GLOBALS['s_right_area_phone'], $GLOBALS['s_right_area_custom'] ); ?>
+                    <?php endif; ?>
                 </div>
 
-                <?php $current_user = wp_get_current_user();?>
                 <nav id="site-nav-d" class="site-nav-d _desktop<?php echo ( 0 != $current_user->ID) ? ' -logged-in' : ''; ?>">
                     <?php if( 0 != $current_user->ID) : ?>
                     <?php seed_member_menu(); ?>
@@ -82,7 +86,7 @@ if(!empty($propertyType)) {
                     <?php endif; ?>
                 </nav>
 
-
+<?php /*
                 <div class="site-action">
                     <?php 
                         if (is_active_sidebar( 'action' )) {
@@ -114,7 +118,7 @@ if(!empty($propertyType)) {
                     ?>
 
                 </div>
-
+*/ ?>
 
             </div>
             <nav id="site-nav-m" class="site-nav-m">

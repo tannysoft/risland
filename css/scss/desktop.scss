@@ -505,6 +505,14 @@ body.page-template-page-form .site-content {
     padding-right: $space-m;
   }
 }
+
+.single-area {
+  >.content-area {
+    .entry-title {
+      text-align: left;
+    }
+  }
+}
 /* COMMENTS */
 .comments-area {
   margin-bottom: 30px;

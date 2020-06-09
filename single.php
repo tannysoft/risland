@@ -40,7 +40,7 @@ $secondary_color = get_field('secondary_color', get_the_ID());
 <div class="project-option">
 	<div class="option-roomtype" data-property-type="<?php echo $propertySlug; ?>">
 		<div class="s-container">
-			<div class="option-content -top" style="background-color: <?php echo $color; ?>;">
+			<div id="option-content" class="option-content -top" style="background-color: <?php echo $color; ?>;">
 				<div class="option-room-type">
 					<ul id="room-type"></ul>
 				</div>
@@ -140,30 +140,32 @@ $secondary_color = get_field('secondary_color', get_the_ID());
         </main>
     </div>
 
-	<aside id="rightbar" class="widget-area content-waiting _heading">
-		<div class="side-reserve" style="background:<?php echo $color; ?>">
-			<div class="reserve">
-				<div class="title">จองเพียง</div>
-				<div id="label-price" class="pricing"></div>
-			</div>
-			<div class="detail">
-				<div class="item">
-					<div class="unit">ยูนิต : <span id="label-unit"></span> | </div>
-					<div class="size">ขนาด : <span id="label-size"></span> ตร.ม.</div>
+	<aside id="rightbar" class="widget-area _heading">
+		<div class="widget-area__inner">
+			<div class="side-reserve content-waiting" style="background:<?php echo $color; ?>">
+				<div class="reserve">
+					<div class="title">จองเพียง</div>
+					<div id="label-price" class="pricing"></div>
 				</div>
-				<div class="item">
-					<div class="title"><span id="label-direction"></span> | </div>
-					<div class="pricing">ราคา : <span id="label-unit-price"></span> บาท</div>
+				<div class="detail">
+					<div class="item">
+						<div class="unit">ยูนิต : <span id="label-unit"></span> | </div>
+						<div class="size">ขนาด : <span id="label-size"></span> ตร.ม.</div>
+					</div>
+					<div class="item">
+						<div class="title"><span id="label-direction"></span> | </div>
+						<div class="pricing">ราคา : <span id="label-unit-price"></span> บาท</div>
+					</div>
 				</div>
-			</div>
-			<div class="form-reserve">
-				<div class="agreement">	
-					<input type="checkbox" id="agree" name="agree" value="agree">
-					<label for="agree"> ยอมรับเงื่อนไขของยูนิต และการจองออนไลน์</label>
-				</div>
-				<div class="buttons">
-					<a href="#" id="btn-booking" class="btn">จองเลย</a>
-					<a href="<?php echo get_field('contact_us_page', 'option'); ?>" class="btn">ติดต่อเจ้าหน้าที่</a>
+				<div class="form-reserve">
+					<div class="agreement">	
+						<input type="checkbox" id="agree" name="agree" value="agree">
+						<label for="agree"> ยอมรับเงื่อนไขของยูนิต และการจองออนไลน์</label>
+					</div>
+					<div class="buttons">
+						<a href="#" id="btn-booking" class="btn">จองเลย</a>
+						<a href="<?php echo get_field('contact_us_page', 'option'); ?>" class="btn">ติดต่อเจ้าหน้าที่</a>
+					</div>
 				</div>
 			</div>
 		</div>

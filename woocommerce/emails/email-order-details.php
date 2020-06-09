@@ -76,8 +76,8 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 	<?php echo get_the_title($projectId); ?><br/>
 	ยูนิต <?php echo $name; ?> ชั้น <?php echo $floorName; ?> ขนาด <?php echo $roomSizeName; ?> ตร.ม.<br/>
 	<?php echo __('ค่าเงินจองที่ชำระ: '); ?> <?php echo $strTotal; ?><br/>
-	ราคา <?php echo $unitPrice; ?> บาท
-
+	ราคา <?php echo $unitPrice; ?> บาท<br /><br />
+	<a href="<?php echo wp_get_attachment_url(get_field('booking_conditions', $projectId)); ?>">เงื่อนไขการจองออนไลน์</a>
 </p>
 <?php /*
 <div style="margin-bottom: 40px;">

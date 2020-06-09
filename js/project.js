@@ -5,11 +5,15 @@ var roomSize      = null;
 var floor         = null;
 var unitId        = null;
 
-var md = new MobileDetect(window.navigator.userAgent);
+var sidebar = document.querySelector('.widget-area__inner');
+var content = document.querySelector('.site-main');
 
-if(md.mobile() == null) {
-  var sidebar = new StickySidebar('#rightbar', {topSpacing: 80});
-}
+var floatSidebar = FloatSidebar({
+  sidebar: sidebar,
+  relative: content,
+  topSpacing: 80,
+  bottomSpacing: 40
+});
 
 document.addEventListener(
     "click",
@@ -184,86 +188,93 @@ function getUnitData(roomTypeLoad = true, roomSizeLoad = true, floorLoad = true,
       if (this.status >= 200 && this.status < 400) {
         // Success!
         var data = JSON.parse(this.response);
-  
-        if(roomTypeLoad === true) {
-          var roomTypeItems = '<li>กรุณาเลือก</li>';
-          data.room_types.forEach(function (item) {
-            roomTypeItems += `<li><a href="#" class="room-type" data-term-id="${item.id}">${item.name}</a></li>`;
-          });
-          document.getElementById('room-type').innerHTML = roomTypeItems;
-          addClass(".option-content.-top", "-show");
-        }
-  
-        if(roomType !== null && roomSizeLoad == true) {
-          addClass(".option-content.-detail", "-show");
-          var roomSizeItems = '';
-          document.getElementById('custom-select-size').remove();
-          roomSizeItems += `<option value="">เลือกขนาด</option>`;
-          data.room_sizes.forEach(function (item) {
-            roomSizeItems += `<option value="${item.id}">${item.name} ตร.ม.</option>`;
-          });
-          document.getElementById('select-size').innerHTML = roomSizeItems;
-          var sizeSelect = new CustomSelect({
-            elem: 'select-size'
-          });
-        }
-  
-        if(roomType !== null && floorLoad == true && propertyType == 'condominium') {
-          var floorItems = '';
-          document.getElementById('custom-select-floor').remove();
-          floorItems += `<option value="">เลือกชั้น</option>`;
-          data.floors.forEach(function (item) {
-            floorItems += `<option value="${item.id}">${item.name}</option>`;
-          });
-          document.getElementById('select-floor').innerHTML = floorItems;
-          var floorSelect = new CustomSelect({
-            elem: 'select-floor'
-          });
-        }
-  
-        if((roomType !== null && unitLoad == true && propertyType == 'condominium') || (roomType !== null && propertyType == 'home' && floorLoad == true)) {
-          var unitItems = '';
-          document.getElementById('custom-select-unit').remove();
-          unitItems += `<option value="">เลือกยูนิต</option>`;
-          data.items.forEach(function (item) {
-            unitItems += `<option value="${item.id}">${item.title}</option>`;
-          });
-          if(data.items) {
-            addClass(".content-waiting", "-show");
-          }
-          document.getElementById('select-unit').innerHTML = unitItems;
-          var unitSelect = new CustomSelect({
-            elem: 'select-unit'
-          });
-        }
-  
-        if(roomType !== null && unitDetailLoad == true) {
-          console.log(data.items);
-          document.getElementById("btn-booking").href               = `/checkout/?add-to-cart=${data.items[0].id}`;
-          document.getElementById('label-direction').innerHTML      = data.items[0].direction[0];
-          document.getElementById('label-price').innerHTML          = `${data.items[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท`;
-          document.getElementById('label-unit').innerHTML           = data.items[0].title;
-          document.getElementById('label-size').innerHTML           = data.items[0].room_size[0].name;
-          document.getElementById('label-unit-price').innerHTML     = data.items[0].unit_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          if(data.items[0].floor_plan) {
-            document.getElementById('pic-floorplan').innerHTML      = `<img src="${data.items[0].floor_plan.url}" alt="${data.items[0].floor_plan.title}" />`;
-          }
-          document.getElementById('label-promotion').innerHTML      = data.items[0].promotion;
-          document.getElementById('label-reserve-price').innerHTML  = data.items[0].reserve_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          document.getElementById('label-contract').innerHTML       = data.items[0].contract.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          document.getElementById('label-deposit-price').innerHTML  = data.items[0].deposit_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          document.getElementById('label-deposit-period').innerHTML = `${data.items[0].deposit_period} งวด`;
-          document.getElementById('label-transfer').innerHTML       = data.items[0].transfer.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          // document.getElementById('label-per-period').innerHTML     = data.items[0].per_period.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-          var dataPerPeriod = '';
-          data.items[0].per_period.forEach(function (item) {
-            dataPerPeriod += `<div class="item">
-                <div class="label">${item.name}</div>
-                <div class="pricing">${item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
-            </div>`;
-          });
-          document.getElementById('label-per-period').innerHTML     = dataPerPeriod;
+        if(data.status == 'success') {
+  
+          if(roomTypeLoad === true) {
+            var roomTypeItems = '<li>กรุณาเลือก</li>';
+            data.room_types.forEach(function (item) {
+              roomTypeItems += `<li><a href="#" class="room-type" data-term-id="${item.id}">${item.name}</a></li>`;
+            });
+            document.getElementById('room-type').innerHTML = roomTypeItems;
+            addClass(".option-content.-top", "-show");
+          }
+    
+          if(roomType !== null && roomSizeLoad == true) {
+            addClass(".option-content.-detail", "-show");
+            var roomSizeItems = '';
+            document.getElementById('custom-select-size').remove();
+            roomSizeItems += `<option value="">เลือกขนาด</option>`;
+            data.room_sizes.forEach(function (item) {
+              roomSizeItems += `<option value="${item.id}">${item.name} ตร.ม.</option>`;
+            });
+            document.getElementById('select-size').innerHTML = roomSizeItems;
+            var sizeSelect = new CustomSelect({
+              elem: 'select-size'
+            });
+          }
+    
+          if(roomType !== null && floorLoad == true && propertyType == 'condominium') {
+            var floorItems = '';
+            document.getElementById('custom-select-floor').remove();
+            floorItems += `<option value="">เลือกชั้น</option>`;
+            data.floors.forEach(function (item) {
+              floorItems += `<option value="${item.id}">${item.name}</option>`;
+            });
+            document.getElementById('select-floor').innerHTML = floorItems;
+            var floorSelect = new CustomSelect({
+              elem: 'select-floor'
+            });
+          }
+    
+          if((roomType !== null && unitLoad == true && propertyType == 'condominium') || (roomType !== null && propertyType == 'home' && floorLoad == true)) {
+            var unitItems = '';
+            document.getElementById('custom-select-unit').remove();
+            unitItems += `<option value="">เลือกยูนิต</option>`;
+            data.items.forEach(function (item) {
+              unitItems += `<option value="${item.id}">${item.title}</option>`;
+            });
+            if(data.items) {
+              addClass(".content-waiting", "-show");
+            }
+            document.getElementById('select-unit').innerHTML = unitItems;
+            var unitSelect = new CustomSelect({
+              elem: 'select-unit'
+            });
+          }
+    
+          if(roomType !== null && unitDetailLoad == true) {
+            console.log(data.items);
+            document.getElementById("btn-booking").href               = `/checkout/?add-to-cart=${data.items[0].id}`;
+            document.getElementById('label-direction').innerHTML      = data.items[0].direction[0];
+            document.getElementById('label-price').innerHTML          = `${data.items[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} บาท`;
+            document.getElementById('label-unit').innerHTML           = data.items[0].title;
+            document.getElementById('label-size').innerHTML           = data.items[0].room_size[0].name;
+            document.getElementById('label-unit-price').innerHTML     = data.items[0].unit_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            if(data.items[0].floor_plan) {
+              document.getElementById('pic-floorplan').innerHTML      = `<img src="${data.items[0].floor_plan.url}" alt="${data.items[0].floor_plan.title}" />`;
+            }
+            document.getElementById('label-promotion').innerHTML      = data.items[0].promotion;
+            document.getElementById('label-reserve-price').innerHTML  = data.items[0].reserve_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('label-contract').innerHTML       = data.items[0].contract.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('label-deposit-price').innerHTML  = data.items[0].deposit_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('label-deposit-period').innerHTML = `${data.items[0].deposit_period} งวด`;
+            document.getElementById('label-transfer').innerHTML       = data.items[0].transfer.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            // document.getElementById('label-per-period').innerHTML     = data.items[0].per_period.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            var dataPerPeriod = '';
+            data.items[0].per_period.forEach(function (item) {
+              dataPerPeriod += `<div class="item">
+                  <div class="label">${item.name}</div>
+                  <div class="pricing">${item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+              </div>`;
+            });
+            document.getElementById('label-per-period').innerHTML     = dataPerPeriod;
+          }
+
+        } else {
+          document.getElementById('option-content').innerHTML = '<div class="sold-out">Sold Out</div>';
+          addClass(".option-content.-top", "-show");
         }
   
       } else {

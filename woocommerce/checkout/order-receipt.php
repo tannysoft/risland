@@ -47,7 +47,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h2>กรุณารอสักครู่...</h2>
 	<h3>ระบบกำลังเข้าสู่ขั้นตอนการชำระเงิน</h3>
 </div>
+
 <script>
 	document.getElementById("2c2p_payment_form").submit();
 </script>
+
 <div class="clear"></div>

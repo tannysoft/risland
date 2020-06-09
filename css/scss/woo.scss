@@ -268,6 +268,25 @@ html:lang(th) .woocommerce-Price-currencySymbol {
 .woocommerce-cart-form__contents td.product-name {
   font-size: 18px;
 }
+.woocommerce-cart {
+  .woocommerce-error {
+    @media (min-width: 992px) {
+      padding-top: 120px;
+      padding-bottom: 0;
+      min-height: 50px;
+      &:before {
+        padding-top: 120px;
+      }
+    }
+    font-family: $heading-font;
+    font-weight: 700;
+    font-size: 1.6em!important;
+    color: $primary;
+  }
+  .cart-collaterals {
+    display: none;
+  }
+}
 #page #main .shop_table {
   border: none;
   border-collapse: collapse;
@@ -777,6 +796,13 @@ html:lang(th) .woocommerce-Price-currencySymbol {
     display: none;
   }
 }
+
+.woocommerce-billing-fields__field-wrapper {
+  label {
+    opacity: 0;
+  }
+}
+
 #main .seed-confirm-banks {
   .table-responsive {
     border: 1px solid #e3e3e3;
@@ -928,6 +954,12 @@ html:lang(th) .woocommerce-Price-currencySymbol {
   width: 36px;
 }
 
+.woocommerce {
+  p {
+    font-family: $heading-font;
+  }
+}
+
 @media (min-width: 992px) {
   /* == WOOCOMMERCE == */
   #main .woocommerce .shop_table {
@@ -945,6 +977,11 @@ html:lang(th) .woocommerce-Price-currencySymbol {
         text-align: right;
         padding-left: 20px;
       }
+    }
+  }
+  .woocommerce-view-order {
+    #main .woocommerce .shop_table {
+      display: block;
     }
   }
   .woocommerce-account {
@@ -1151,4 +1188,8 @@ html .woocommerce .blockUI.blockOverlay {
 .woocommerce form .show-password-input,
 .woocommerce-page form .show-password-input {
   top: .3em;
+}
+
+.woocommerce-ResetPassword {
+  font-family: $heading-font;
 }

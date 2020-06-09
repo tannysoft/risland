@@ -1148,6 +1148,14 @@ body.page-template-page-form .site-content {
       width: 100%;
     }
   }
+  .sold-out {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-family: $heading-font;
+    font-size: 1.2em;
+    font-weight: 700;
+    line-height: 2em;
+  }
 }
 
 .single-pic {
@@ -1451,6 +1459,7 @@ body.page-template-page-form .site-content {
 
 /* WIDGET AREA */
 .widget-area {
+  position: relative;
   .current-menu-item > a {
     font-weight: bold;
     color: $link-text;
@@ -1569,6 +1578,16 @@ body.page-template-page-form .site-content {
   }
 }
 
+.title-link {
+  a {
+    color: #fff;
+    opacity: .4;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
 .imghvr-content {
   z-index: 1000;
   position: absolute;
@@ -1619,7 +1638,7 @@ body.page-template-page-form .site-content {
     width: auto;
     margin: 0 auto;
     display: block;
-    padding: 8px 25px;
+    padding: 8px 70px;
     font-family: $heading-font;
     font-size: 1.3em;
     line-height: 1.3em;
@@ -1722,4 +1741,33 @@ body.page-template-page-form .site-content {
 
 .cn-text-container {
   text-align: left;
+}
+
+div.wpcf7 {
+  .ajax-loader {
+    display: none;
+  }
+}
+
+div.wpcf7-response-output {
+  display: none;
+}
+
+.r-button  {
+  .kt-btn-wrap {
+    .kt-btn-size-small {
+      padding-left: 70px;
+      padding-right: 70px;
+    }
+  }
+}
+
+.wp-block-yoast-faq-block {
+  font-family: $heading-font;
+}
+
+.privacy-policy {
+  .content-area {
+    font-family: $heading-font;
+  }
 }

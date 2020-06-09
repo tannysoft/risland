@@ -208,7 +208,7 @@ function seed_scripts() {
 
     if(is_single() && get_post_type()=='project') {
         wp_enqueue_script('s-mobile-detect', get_theme_file_uri('/js/mobile-detect.min.js'), array(), '3.3.1', true);
-        wp_enqueue_script('s-sticky-sidebar', get_theme_file_uri('/js/sticky-sidebar.min.js'), array(), '3.3.1', true);
+        wp_enqueue_script('s-float-sidebar', get_theme_file_uri('/js/float-sidebar.min.js'), array(), '3.3.1', true);
     }
 
     wp_enqueue_script('s-scripts', get_theme_file_uri('/js/scripts.js'), array(), filemtime(get_theme_file_path('/js/scripts.js')), true);
@@ -578,6 +578,29 @@ function risland_get_project_unit( $data ) {
         $args['p'] = (int)$unitId;
     }
 
+    $query = new WC_Order_Query( array(
+        // 'customer_id' => risland_get_user_id(),
+        'limit'     => '-1',
+        'status'    =>  ['wc-processing'],
+        'orderby'   => 'date',
+        'order'     => 'DESC',
+        'return'    => 'ids',
+    ) );
+    $orders = $query->get_orders();
+
+    foreach ($orders as $key => $value) {
+        $order = wc_get_order( $value );
+        $items = $order->get_items();
+
+        foreach ( $items as $item ) {
+            $order_success_product_id[] = $item->get_product_id();
+        }
+    }
+
+    // var_dump($order_success_product_id);
+
+    $args['post__not_in'] = $order_success_product_id;
+
     $query = new WP_Query( $args );
 
     // The Loop
@@ -585,6 +608,9 @@ function risland_get_project_unit( $data ) {
         $i = 0;
         while ( $query->have_posts() ) {
             $query->the_post();
+
+            unset($item);
+            unset($items);
 
             $propertyType = get_field('property_type', (int)$data['id']);
             foreach ($propertyType as $key => $value) {
@@ -623,7 +649,7 @@ function risland_get_project_unit( $data ) {
                 $roomSizeGroupItem['name']      = $value->name;
 
                 $roomSizeGroup[$value->term_id] = $roomSizeGroupItem;
-                
+
                 $roomSizeData[$x]['id']         = $value->term_id;
                 $roomSizeData[$x]['name']       = $value->name;
                 $x++;
@@ -639,7 +665,7 @@ function risland_get_project_unit( $data ) {
                 $floorGroupItem['name']      = $value->name;
 
                 $floorGroup[$value->term_id] = $floorGroupItem;
-                
+
                 $floorData[$x]['id']         = $value->term_id;
                 $floorData[$x]['name']       = $value->name;
                 $x++;
@@ -667,36 +693,39 @@ function risland_get_project_unit( $data ) {
                 endwhile;
            endif;
 
-            $items[$i]['id']                    = get_the_id();
-            $items[$i]['title']                 = get_the_title();
-            $items[$i]['room_type']             = $roomTypeData;
-            $items[$i]['room_size']             = $roomSizeData;
-            $items[$i]['floor']                 = $floorData;
-            $items[$i]['direction']             = $directionData;
+            $item['id']                     = get_the_id();
+            $item['title']                  = get_the_title();
+            $item['room_type']              = $roomTypeData;
+            $item['room_size']              = $roomSizeData;
+            $item['floor']                  = $floorData;
+            $item['direction']              = $directionData;
 
-            $product                            = wc_get_product( get_the_id() );
-            $items[$i]['price']                 = (int)$product->get_price();
-            $items[$i]['unit_price']            = (int)get_field('unit_price', get_the_id());
+            $product                        = wc_get_product( get_the_id() );
+            $item['price']                  = (int)$product->get_price();
+            $item['unit_price']             = (int)get_field('unit_price', get_the_id());
             if(get_field('floor_plan', get_the_id())) {
-                $items[$i]['floor_plan']['id']      = get_field('floor_plan', get_the_id())['ID'];
-                $items[$i]['floor_plan']['title']   = get_field('floor_plan', get_the_id())['title'];
-                $items[$i]['floor_plan']['url']     = get_field('floor_plan', get_the_id())['url'];
+                $item['floor_plan']['id']   = get_field('floor_plan', get_the_id())['ID'];
+                $item['floor_plan']['title']    = get_field('floor_plan', get_the_id())['title'];
+                $item['floor_plan']['url']  = get_field('floor_plan', get_the_id())['url'];
             }
-            $items[$i]['promotion']             = get_field('promotion', get_the_id());
-            $items[$i]['reserve_price']         = (int)get_field('reserve_price', get_the_id());
-            $items[$i]['contract']              = (int)get_field('contract', get_the_id());
-            $items[$i]['deposit_price']         = (int)get_field('deposit_price', get_the_id());
-            $items[$i]['deposit_period']        = (int)get_field('deposit_period', get_the_id());
-            $items[$i]['transfer']              = (int)get_field('transfer', get_the_id());
+            $item['promotion']              = get_field('promotion', get_the_id());
+            $item['reserve_price']          = (int)get_field('reserve_price', get_the_id());
+            $item['contract']               = (int)get_field('contract', get_the_id());
+            $item['deposit_price']          = (int)get_field('deposit_price', get_the_id());
+            $item['deposit_period']         = (int)get_field('deposit_period', get_the_id());
+            $item['transfer']               = (int)get_field('transfer', get_the_id());
             if(!empty($perPeriodData)) {
-                $items[$i]['per_period']        = $perPeriodData;
+                $item['per_period']         = $perPeriodData;
             }
-            // $items[$i]['per_period']            = get_field('per_period', get_the_id());
+            // $item['per_period']          = get_field('per_period', get_the_id());
 
-            // $return[$i]['room_type']         = get_field('room_type', get_the_id());
+            // $return[$i]['room_type']     = get_field('room_type', get_the_id());
 
-            // $return[$i]['room_type']         = get_the_terms( get_the_id(), 'room_type' );
+            // $return[$i]['room_type']     = get_the_terms( get_the_id(), 'room_type' );
             // echo '<li>' . get_the_title() . '</li>';
+
+            $items[] = $item;
+
             $i++;
         }
 
@@ -720,6 +749,8 @@ function risland_get_project_unit( $data ) {
         }
 
         $return['items']                = $items;
+
+        $return['status']               = 'success';
     } else {
     // no posts found
     }
@@ -731,10 +762,25 @@ function risland_get_project_unit( $data ) {
     // ) );
    
     if ( empty( $return ) ) {
-      return null;
+        $return['status'] = 'no-product';
+        return $return;
     }
    
     return $return;
+}
+
+function risland_get_user_id() {
+
+    $user_id = apply_filters( 'determine_current_user', false );
+    // wp_set_current_user( $user_id );
+
+    return $user_id;
+}
+
+add_action('init', 'get_your_current_user_id');
+function get_your_current_user_id(){
+        $your_current_user_id = get_current_user_id();
+        //do something here with it
 }
 
 add_filter( 'woocommerce_add_to_cart_validation', 'bbloomer_only_one_in_cart', 99, 2 );
@@ -839,68 +885,267 @@ function wc_renaming_order_status( $order_statuses ) {
     return $order_statuses;
 }
 
+function risland_get_account_formatted_address( $address_type = 'billing', $customer_id = 0 ) {
+    $getter  = "get_{$address_type}";
+    $address = array();
+  
+    if ( 0 === $customer_id ) {
+      $customer_id = get_current_user_id();
+    }
+  
+    $customer = new WC_Customer( $customer_id );
+  
+    if ( is_callable( array( $customer, $getter ) ) ) {
+      $address = $customer->$getter();
+      unset( $address['email'], $address['tel'] );
+    }
+    
+    $address['state'] = risland_states($address['state']);
+  
+    return WC()->countries->get_formatted_address( apply_filters( 'woocommerce_my_account_my_address_formatted_address', $address, $customer->get_id(), $address_type ) );
+}
+
+function risland_states($state_key) {
+    $states['TH-81'] = 'กระบี่';
+    $states['TH-10'] = 'กรุงเทพมหานคร';
+    $states['TH-71'] = 'กาญจนบุรี';
+    $states['TH-46'] = 'กาฬสินธุ์';
+    $states['TH-62'] = 'กำแพงเพชร';
+    $states['TH-40'] = 'ขอนแก่น';
+    $states['TH-22'] = 'จันทบุรี';
+    $states['TH-24'] = 'ฉะเชิงเทรา';
+    $states['TH-20'] = 'ชลบุรี';
+    $states['TH-18'] = 'ชัยนาท';
+    $states['TH-36'] = 'ชัยภูมิ';
+    $states['TH-86'] = 'ชุมพร';
+    $states['TH-57'] = 'เชียงราย';
+    $states['TH-50'] = 'เชียงใหม่';
+    $states['TH-92'] = 'ตรัง';
+    $states['TH-23'] = 'ตราด';
+    $states['TH-63'] = 'ตาก';
+    $states['TH-26'] = 'นครนายก';
+    $states['TH-73'] = 'นครปฐม';
+    $states['TH-48'] = 'นครพนม';
+    $states['TH-30'] = 'นครราชสีมา';
+    $states['TH-80'] = 'นครศรีธรรมราช';
+    $states['TH-60'] = 'นครสวรรค์';
+    $states['TH-12'] = 'นนทบุรี';
+    $states['TH-96'] = 'นราธิวาส';
+    $states['TH-55'] = 'น่าน';
+    $states['TH-38'] = 'บึงกาฬ';
+    $states['TH-31'] = 'บุรีรัมย์';
+    $states['TH-13'] = 'ปทุมธานี';
+    $states['TH-77'] = 'ประจวบคีรีขันธ์';
+    $states['TH-25'] = 'ปราจีนบุรี';
+    $states['TH-94'] = 'ปัตตานี';
+    $states['TH-14'] = 'พระนครศรีอยุธยา';
+    $states['TH-56'] = 'พะเยา';
+    $states['TH-82'] = 'พังงา';
+    $states['TH-93'] = 'พัทลุง';
+    $states['TH-66'] = 'พิจิตร';
+    $states['TH-65'] = 'พิษณุโลก';
+    $states['TH-76'] = 'เพชรบุรี';
+    $states['TH-67'] = 'เพชรบูรณ์';
+    $states['TH-54'] = 'แพร่';
+    $states['TH-83'] = 'ภูเก็ต';
+    $states['TH-44'] = 'มหาสารคาม';
+    $states['TH-49'] = 'มุกดาหาร';
+    $states['TH-58'] = 'แม่ฮ่องสอน';
+    $states['TH-35'] = 'ยโสธร';
+    $states['TH-95'] = 'ยะลา';
+    $states['TH-45'] = 'ร้อยเอ็ด';
+    $states['TH-85'] = 'ระนอง';
+    $states['TH-21'] = 'ระยอง';
+    $states['TH-70'] = 'ราชบุรี';
+    $states['TH-16'] = 'ลพบุรี';
+    $states['TH-52'] = 'ลำปาง';
+    $states['TH-51'] = 'ลำพูน';
+    $states['TH-42'] = 'เลย';
+    $states['TH-33'] = 'ศรีสะเกษ';
+    $states['TH-47'] = 'สกลนคร';
+    $states['TH-90'] = 'สงขลา';
+    $states['TH-91'] = 'สตูล';
+    $states['TH-11'] = 'สมุทรปราการ';
+    $states['TH-75'] = 'สมุทรสงคราม';
+    $states['TH-74'] = 'สมุทรสาคร';
+    $states['TH-27'] = 'สระแก้ว';
+    $states['TH-19'] = 'สระบุรี';
+    $states['TH-17'] = 'สิงห์บุรี';
+    $states['TH-64'] = 'สุโขทัย';
+    $states['TH-72'] = 'สุพรรณบุรี';
+    $states['TH-84'] = 'สุราษฎร์ธานี';
+    $states['TH-32'] = 'สุรินทร์';
+    $states['TH-43'] = 'หนองคาย';
+    $states['TH-39'] = 'หนองบัวลำภู';
+    $states['TH-15'] = 'อ่างทอง';
+    $states['TH-37'] = 'อำนาจเจริญ';
+    $states['TH-41'] = 'อุดรธานี';
+    $states['TH-53'] = 'อุตรดิตถ์';
+    $states['TH-61'] = 'อุทัยธานี';
+    $states['TH-34'] = 'อุบลราชธานี';
+
+	return $states[$state_key];
+}
+
 function risland_send_sms($order, $status) {
 
-    require 'sendMessageService.php';
+    if($status == 'success') {
 
-    //var_dump($order->get_order_number());
-	foreach ( $order->get_items() as $item_id => $item ) {
-		$product_id = $item->get_product_id();
-		$variation_id = $item->get_variation_id();
-		$product = $item->get_product();
-		$name = $item->get_name();
-		$quantity = $item->get_quantity();
-		$subtotal = $item->get_subtotal();
-		$total = $item->get_total();
-		$tax = $item->get_subtotal_tax();
-		$taxclass = $item->get_tax_class();
-		$taxstat = $item->get_tax_status();
-		$allmeta = $item->get_meta_data();
-		// $somemeta = $item->get_meta( '_whatever', true );
-		$type = $item->get_type();
-	}
+        require 'sendMessageService.php';
 
-    $projectId = (int)get_field('project', $product_id);
-    $projectName = get_the_title($projectId);
+        foreach ( $order->get_items() as $item_id => $item ) {
+            $product_id     = $item->get_product_id();
+            $variation_id   = $item->get_variation_id();
+            $product        = $item->get_product();
+            $name           = $item->get_name();
+            $quantity       = $item->get_quantity();
+            $subtotal       = $item->get_subtotal();
+            $total          = $item->get_total();
+            $tax            = $item->get_subtotal_tax();
+            $taxclass       = $item->get_tax_class();
+            $taxstat        = $item->get_tax_status();
+            $allmeta        = $item->get_meta_data();
+            // $somemeta = $item->get_meta( '_whatever', true );
+            $type = $item->get_type();
+        }
 
-	$unitPrice = number_format((int)get_field('unit_price', $product_id));
+        $projectId = (int)get_field('project', $product_id);
+        $projectName = get_the_title($projectId);
 
-	$total = $order->get_total();
-	$strTotal = $total . ' บาท';
+        $unitPrice = number_format((int)get_field('unit_price', $product_id));
 
-    // define account and password
-    $account = 'post01@risland1';
-    $password = '4D5AB7783DF2DD6A71651140D179ABD5C81420CEAABCE23E09301A479534014A';
+        $total = $order->get_total();
+        $strTotal = $total . ' บาท';
 
-    $mobile_no = $order->billing_phone;
-    // or $mobile_no = '0830000000,0831111111';
-    $message = "ทางบริษัทฯ ขอขอบคุณสำหรับการจองโครงการ$projectName ยูนิต $name ค่าเงินจองที่ชำระแล้ว $strTotal ติดต่อเจ้าหน้าที่ 020266888";
-    $category = 'General';
-    $sender_name = '';
+        // define account and password
+        $account = 'post01@risland1';
+        $password = '4D5AB7783DF2DD6A71651140D179ABD5C81420CEAABCE23E09301A479534014A';
 
-    $results = SendMessageService::sendMessage($account, $password, $mobile_no, $message, '', $category, $sender_name);
+        $mobile_no = $order->billing_phone;
+        // or $mobile_no = '0830000000,0831111111';
+        $message = "ทางบริษัทฯ ขอขอบคุณสำหรับการจองโครงการ$projectName ยูนิต $name ค่าเงินจองที่ชำระแล้ว $strTotal ติดต่อเจ้าหน้าที่ 020266888";
+        $category = 'General';
+        $sender_name = '';
 
-    // use http proxy
-    // $proxy = 'localhost:8888';
-    // $proxy_userpwd = 'username:password';
-    // $results = SendMessageService::sendMessage($account, $password, $mobile_no, $message, '', $category, $sender_name, $proxy, $proxy_userpwd);
+        $results = SendMessageService::sendMessage($account, $password, $mobile_no, $message, '', $category, $sender_name);
 
-    if ($results['result']) {
-        // echo 'Send Success.'.' Task ID='.$results['task_id'].', Message ID='.$results['message_id'];
-        $to = get_option('admin_email');
-        $subject = 'Risland Online Send SMS Success!';
-        $body = 'Send Success.'.' Task ID='.$results['task_id'].', Message ID='.$results['message_id'];
-        $headers = array('Content-Type: text/html; charset=UTF-8','From: Risland Online &lt;noreply@risland.co.th');
+        // use http proxy
+        // $proxy = 'localhost:8888';
+        // $proxy_userpwd = 'username:password';
+        // $results = SendMessageService::sendMessage($account, $password, $mobile_no, $message, '', $category, $sender_name, $proxy, $proxy_userpwd);
 
-        wp_mail( $to, $subject, $body, $headers );
-    } else {
-        // echo $results['error'];
-        $to = get_option('admin_email');
-        $subject = 'Risland Online Send SMS Error!';
-        $body = $results['error'];
-        $headers = array('Content-Type: text/html; charset=UTF-8','From: Risland Online &lt;noreply@risland.co.th');
+        if ($results['result']) {
+            // echo 'Send Success.'.' Task ID='.$results['task_id'].', Message ID='.$results['message_id'];
+            $to = get_option('admin_email');
+            $subject = 'Risland Online Send SMS Success!';
+            $body = 'Send Success.'.' Task ID='.$results['task_id'].', Message ID='.$results['message_id'];
+            $headers = array('Content-Type: text/html; charset=UTF-8','From: Risland Online &lt;noreply@risland.co.th');
 
-        wp_mail( $to, $subject, $body, $headers );
+            wp_mail( $to, $subject, $body, $headers );
+        } else {
+            // echo $results['error'];
+            $to = get_option('admin_email');
+            $subject = 'Risland Online Send SMS Error!';
+            $body = $results['error'];
+            $headers = array('Content-Type: text/html; charset=UTF-8','From: Risland Online &lt;noreply@risland.co.th');
+
+            wp_mail( $to, $subject, $body, $headers );
+        }
+
     }
 
 }
+
+// Hook in
+add_filter( 'woocommerce_checkout_fields' , 'custom_override_checkout_fields' );
+
+// Our hooked in function - $fields is passed via the filter!
+function custom_override_checkout_fields( $fields ) {
+
+     $fields['billing']['billing_address_1'] = array(
+        'label'         => __('เลขที่บ้าน/หมู่บ้าน/คอนโด', 'woocommerce'),
+        'placeholder'   => _x('เลขที่บ้าน/หมู่บ้าน/คอนโด *', 'placeholder', 'woocommerce'),
+        'required'      => true,
+        'class'         => array('address-field', 'form-row-first'),
+        // 'clear'     => false
+     );
+
+     $fields['billing']['billing_address_2'] = array(
+        'label'         => __('แขวง', 'woocommerce'),
+        'placeholder'   => _x('แขวง *', 'placeholder', 'woocommerce'),
+        'required'      => true,
+        'class'         => array('address-field', 'form-row-first'),
+        // 'clear'     => false
+     );
+
+     $fields['billing']['billing_city'] = array(
+        'label'         => __('เขต', 'woocommerce'),
+        'placeholder'   => _x('เขต *', 'placeholder', 'woocommerce'),
+        'required'      => true,
+        'class'         => array('address-field', 'form-row-last'),
+        // 'clear'     => false
+     );
+
+     $fields['billing']['billing_postcode'] = array(
+        'label'         => __('รหัสไปรษณีย์', 'woocommerce'),
+        'placeholder'   => _x('รหัสไปรษณีย์ *', 'placeholder', 'woocommerce'),
+        'required'      => true,
+        'class'         => array('address-field', 'form-row-first'),
+        // 'clear'     => false
+     );
+
+     return $fields;
+}
+
+/**
+ * Display field value on the order edit page
+ */
+ 
+// add_action( 'woocommerce_admin_order_data_after_shipping_address', 'my_custom_checkout_field_display_admin_order_meta', 10, 1 );
+
+// function my_custom_checkout_field_display_admin_order_meta($order){
+//     echo '<p><strong>'.__('Phone From Checkout Form').':</strong> ' . get_post_meta( $order->get_id(), '_shipping_phone', true ) . '</p>';
+// }
+
+// function get_exclude_orders_project() {
+//     $order = new WC_Order( $order_id );
+//     $items = $order->get_items();
+
+//     foreach ( $items as $item ) {
+//         $product_name = $item['name'];
+//         $product_id = $item['product_id'];
+//         $product_variation_id = $item['variation_id'];
+//     }
+
+//     var_dump($product_name);
+// }
+
+// function fb_exclude_filter($query) {
+//     // if ( !$query->is_admin && $query->is_feed) {
+//         $query->set('post__not_in', array(62) ); // id of page or post
+//     // }
+//     return $query;
+// }
+// add_filter( 'pre_get_posts', 'fb_exclude_filter' );
+
+// function my_logged_in_redirect() {
+
+//     if (strpos($_SERVER['HTTP_REFERER'], 'https://accounts.google.com/signin/oauth/') !== false) {
+
+//         if ( is_user_logged_in() && is_checkout() === false && is_account_page() === true ) {
+
+//             global $woocommerce;
+//             if ( $woocommerce->cart->cart_contents_count > 0 ) {
+//                 wp_safe_redirect( wc_get_checkout_url() );
+//                 die;
+//             } else {
+//                 wp_safe_redirect( site_url() );
+//                 die;
+//             }
+
+//         }
+
+//     }
+     
+// }
+// add_action( 'template_redirect', 'my_logged_in_redirect' );

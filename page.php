@@ -31,7 +31,7 @@ get_header();
 ?>
 <?php while ( have_posts() ) : the_post(); ?>
 
-<?php if(!is_front_page() && is_checkout() == false && !is_page('my-account')) seed_banner_title(get_the_ID()); ?>
+<?php if(!is_front_page() && is_checkout() == false && !is_page('my-account') && !is_page('cart')) seed_banner_title(get_the_ID()); ?>
 
 <?php /* if(is_checkout() == true || is_page('my-account')): ?>
     <div class="main-header -minimal">
@@ -115,6 +115,7 @@ if(is_checkout() == true) {
             echo '<div class="title-confirm"><h2>ยืนยันการจอง</h2></div>';
             echo '<div class="title-confirm"><h3>' . $roomTypeName . ' - ' . get_the_title($projectId) . '</h3></div>';
             echo '<div class="title-confirm"><h4><span>ยูนิต : ' . $_product->get_name() . '&nbsp;' . $directionName . '</span><span>ขนาด : ' . $roomSizeName . ' ตร.ม.</span>' . $floorString . '<span>ราคา : ' . $unitPrice . ' บาท</span></h4></div>';
+            echo '<div class="title-confirm"><h5 class="title-link"><a href="' . get_permalink($projectId) . '">แก้ไขข้อมูลการจอง</a></h5></div>';
             echo '<div class="order-line"></div>';
             echo '</div>';
 

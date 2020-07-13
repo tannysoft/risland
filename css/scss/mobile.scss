@@ -407,10 +407,30 @@
   .s-grid {
     margin-bottom: 0;
   }
+  @media (max-width: 768px) {
+    .top-title {
+      > div {
+        &:nth-child(1) {
+          order: 2;
+        }
+        &:nth-child(2) {
+          order: 1;
+        }
+      }
+    }
+  }
   .breadcrumbs {
-    display: none;
+    text-align: center;
+    font-family: $heading-font;
+    font-size: .8em;
+    letter-spacing: 1.3px;
+    color: #fff;
     p {
       margin-bottom: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-all;
       > span {
         > span:not(:not(.breadcrumb_last)) {
           opacity: .4;
@@ -504,13 +524,17 @@
 
 .home {
   .breadcrumbs {
-    opacity: 0;
+    display: none;
   }
   .main-header {
     &.-minimal {
       margin-bottom: 0;
     }
   }
+}
+
+.blocks-gallery-grid, .wp-block-gallery {
+  width: 100%;
 }
 
 .page-id-346,

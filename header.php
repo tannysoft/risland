@@ -151,7 +151,7 @@ if(!empty($propertyType)) {
 
         <div class="main-header -minimal">
             <div class="s-container">
-                <div class="s-grid -d3 -middle">
+                <div class="s-grid top-title -d3 -middle">
                     <div class="breadcrumbs">
                         <?php
                         if ( function_exists('yoast_breadcrumb') ) {

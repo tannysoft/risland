@@ -987,6 +987,14 @@ function risland_states($state_key) {
 	return $states[$state_key];
 }
 
+function filter_woocommerce_order_formatted_billing_address( $array, $int ) {
+    $array['state'] = risland_states($array['state']);
+    return $array;
+};
+         
+// add the filter 
+add_filter( 'woocommerce_order_formatted_billing_address', 'filter_woocommerce_order_formatted_billing_address', 10, 3 );
+
 function risland_send_sms($order, $status) {
 
     if($status == 'success') {

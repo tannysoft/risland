@@ -13,6 +13,7 @@ $color = get_field('color', get_the_ID());
 
 <article id="post-<?php the_ID(); ?>" <?php post_class('content-single'); ?>>
     <header class="entry-header">
+        <?php /*
         <div class="mobile-breadcrumb _mobile">
             <?php
             if ( function_exists('yoast_breadcrumb') ) {
@@ -20,6 +21,7 @@ $color = get_field('color', get_the_ID());
             }
             ?>
         </div>
+        */ ?>
         <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
     </header>
 

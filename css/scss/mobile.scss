@@ -1674,6 +1674,86 @@ body.page-template-page-form .site-content {
   }
 }
 
+.house-item {
+  .wp-block-kadence-column {
+    transition: 300ms;
+  }
+  .kt-block-intrisic {
+    padding-bottom: 0!important;
+    height: 100%;
+  }
+  .kt-image-overlay-wrap.kt-over-image-zoomin .kt-block-intrisic>img {
+    position: relative;
+    height: 120px;
+    object-fit: cover;
+    transform: scale(1)!important;
+  }
+  .kt-image-overlay-wrap.kt-over-image-zoomin:hover .kt-block-intrisic>img {
+    transform: scale(1)!important;
+  }
+  // > .kt-row-layout-inner {
+  //   > .kt-row-column-wrap {
+  //     > .wp-block-kadence-column {
+  //       height: 100%!important;
+  //     }
+  //   }
+  // }
+  &:hover {
+    > .kt-row-layout-inner {
+      > .kt-row-column-wrap {
+        > .wp-block-kadence-column {
+          &.inner-column-1 {
+            flex: 0!important;
+            transition: 300ms;
+          }
+          &.inner-column-2 {
+            flex: 100%!important;
+            transition: 300ms;
+          }
+        }
+      }
+    }
+  }
+  .house-info {
+    height: 100%;
+    > .kt-row-layout-inner {
+      height: 100%;
+      > .kt-row-column-wrap {
+        height: 100%;
+        > .wp-block-kadence-column {
+          > .kt-inside-inner-col {
+            .wp-block-image {
+              margin: 0;
+              width: 100%;
+              height: 100%;
+              figure {
+                width: 100%;
+                height: 100%;
+              }
+              a {
+                display: flex;
+                width: 100%;
+                height: 100%;
+                align-items: center;
+                text-align: center;
+                img {
+                  margin: 0 auto 20px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .house-price {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+}
+
 /* == FOOTER == */
 .site-footer-space {
   min-height: $footer-m-height;

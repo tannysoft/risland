@@ -243,10 +243,7 @@ body.headbar-d {
   .breadcrumbs {
     display: block;
     text-align: left;
-    font-family: $heading-font;
-    font-size: .8em;
-    letter-spacing: 1.3px;
-    color: #fff;
+    
   }
   &.-banner {
     padding-bottom: $space-d - 4;
@@ -557,6 +554,12 @@ body.page-template-page-form .site-content {
   .order-line {
     margin: 60px auto 0;
     max-width: 670px;
+  }
+}
+
+.house-item {
+  .kt-image-overlay-wrap.kt-over-image-zoomin .kt-block-intrisic>img {
+    height: 206px;
   }
 }
 

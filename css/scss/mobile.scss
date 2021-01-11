@@ -1428,8 +1428,17 @@ body.page-template-page-form .site-content {
         text-align: center;
         border: 1px solid #fff;
         color: #fff;
+        svg {
+          max-width: 22px;
+          max-height: 22px;
+          margin-top: -2px;
+          margin-right: 8px;
+        }
         &:hover {
           background-color: #fff;
+          svg {
+            color: #343d3e;
+          }
         }
       }
       #btn-booking {

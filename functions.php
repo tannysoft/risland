@@ -486,6 +486,9 @@ function risland_styles_method() {
             border-color: $font_color;
             color: $font_color;
         }
+        .side-reserve .form-reserve .buttons .btn:hover {
+            color: $font_color;
+        }
         ";
 
         wp_add_inline_style( 'font-color-custom-style', $custom_font_css );

@@ -17,6 +17,7 @@ foreach ($propertyType as $key => $value) {
 }
 $color = get_field('color', get_the_ID());
 $secondary_color = get_field('secondary_color', get_the_ID());
+$facebook_page_id = get_field('facebook_page_id');
 ?>
 
 
@@ -164,12 +165,40 @@ $secondary_color = get_field('secondary_color', get_the_ID());
 					</div>
 					<div class="buttons">
 						<a href="#" id="btn-booking" class="btn">จองเลย</a>
-						<a href="<?php echo get_field('contact_us_page', 'option'); ?>" class="btn">ติดต่อเจ้าหน้าที่</a>
+						<?php if($facebook_page_id): ?>
+							<a href="http://m.me/<?php echo $facebook_page_id; ?>" target="_blank" class="btn"><?php echo seed_icon('icon-messenger-color'); ?>ติดต่อเจ้าหน้าที่</a>
+						<?php else: ?>
+							<a href="<?php echo get_field('contact_us_page', 'option'); ?>" target="_blank" class="btn"><?php echo seed_icon('icon-messenger-color'); ?>ติดต่อเจ้าหน้าที่</a>
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>
 		</div>
 	</aside>
+	<!-- Load Facebook SDK for JavaScript -->
+	<div id="fb-root"></div>
+	<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+				xfbml            : true,
+				version          : 'v9.0'
+			});
+		};
+
+		(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = 'https://connect.facebook.net/th_TH/sdk/xfbml.customerchat.js';
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+
+	<!-- Your Chat Plugin code -->
+	<div class="fb-customerchat"
+		attribution=setup_tool
+		page_id="<?php the_field('facebook_page_id'); ?>"
+		theme_color="#002328">
+	</div>
     <?php 
 	// get_sidebar('right'); 
 	?>

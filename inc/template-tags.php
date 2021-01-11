@@ -307,3 +307,18 @@ echo '<div class="site-custom">' . $custom . '</div>';
 break;
 }
 }
+
+/*
+ * Output SVG icons from /img/i/[ICON-NAME].svg
+ */
+if ( ! function_exists( 'seed_icon' ) ) :
+	function seed_icon($i = NULL) {
+		if(!$i) {
+			return;
+		}
+		$file = get_theme_file_path( '/img/i/' . $i . '.svg');
+		if(file_exists($file)) {
+			include get_theme_file_path( '/img/i/' . $i . '.svg');
+		}
+	}
+endif;

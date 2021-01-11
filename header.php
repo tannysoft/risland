@@ -12,10 +12,11 @@
     ?>
     <?php echo get_field('google_analytics', 'option'); ?>
     <?php echo get_field('google_tag_manager_head', 'option'); ?>
-
+<?php /*
     <!-- Start of risland Zendesk Widget script -->
     <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=bc6744f3-881e-42da-8830-9a71c84b6a8b"> </script>
     <!-- End of risland Zendesk Widget script -->
+*/ ?>
 </head>
 <?php
 $propertyType = get_field('property_type', get_the_ID());

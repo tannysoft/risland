@@ -1621,6 +1621,10 @@ body.page-template-page-form .site-content {
   }
 }
 
+.imghvr {
+  max-height: 220px;
+}
+
 .imghvr-content {
   z-index: 1000;
   position: absolute;
@@ -1882,5 +1886,13 @@ div.wpcf7-response-output {
 .privacy-policy {
   .content-area {
     font-family: $heading-font;
+  }
+}
+
+.wc-social-login {
+  .si-facebook {
+    &:before {
+      display: none;
+    }
   }
 }
